@@ -4,7 +4,7 @@ import os
 
 # 播放音效（只支援 wav）
 _sound_library = {}
-def play_sound(path):
+def play_sound(path, loops=0):
     global _sound_library
     sound = _sound_library.get(path)
     if sound is None:
@@ -12,4 +12,4 @@ def play_sound(path):
         sound = pygame.mixer.Sound(temp)
         sound.set_volume(0.2)
         _sound_library[path] = sound
-    sound.play()
+    sound.play(loops=loops)

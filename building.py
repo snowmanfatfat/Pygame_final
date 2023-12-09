@@ -7,10 +7,8 @@ from setting import *
 
 all_sprites = pygame.sprite.Group()
 buildings = pygame.sprite.Group()
-
 sizes = [(150, 150), (140, 240), (100, 240), (220, 216), (150, 150), (150, 150), (160, 240)]
 building_imgs = [pygame.transform.scale(pygame.image.load(os.path.join("img/building", f"building{i}.png")), size) for i, size in enumerate(sizes)]
-
 class Building(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)

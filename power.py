@@ -3,13 +3,11 @@
 import pygame
 import random
 import os
-
-BLACK = (0, 0, 0)
-HEIGHT = 810
+from setting import *
 
 powers = pygame.sprite.Group()
 power_imgs = {}
-power_imgs['blood'] = pygame.image.load(os.path.join("img/power", "blood_old.png")).convert()
+power_imgs['blood'] = pygame.image.load(os.path.join("img/power", "blood_old.png"))
 power_imgs['gun'] = pygame.image.load(os.path.join("img/power", "gun.png"))
 
 class Power(pygame.sprite.Sprite):
@@ -20,9 +18,9 @@ class Power(pygame.sprite.Sprite):
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.center = center
-        self.speedy = 3
+        self.speed = 3
 
     def update(self):
-        self.rect.y += self.speedy
+        self.rect.y += self.speed
         if self.rect.top > HEIGHT:
             self.kill()

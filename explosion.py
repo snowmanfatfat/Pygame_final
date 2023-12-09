@@ -2,14 +2,11 @@
 
 import pygame
 import os
+from setting import *
 
 BLACK = (0, 0, 0)
 
-expl_anim = {}
-expl_anim['lg'] = []
-expl_anim['sm'] = []
-expl_anim['player'] = []
-
+expl_anim = {'lg':[], 'sm':[], 'player':[]}
 for i in range(9):
     expl_img = pygame.image.load(os.path.join("img/explosion", f"expl{i}.png"))
     expl_img.set_colorkey(BLACK)
@@ -22,11 +19,11 @@ for i in range(9):
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, center, size):
         pygame.sprite.Sprite.__init__(self)
+        self.frame = 0
         self.size = size
-        self.image = expl_anim[self.size][0]
+        self.image = expl_anim[self.size][self.frame]
         self.rect = self.image.get_rect()
         self.rect.center = center
-        self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
 
@@ -39,6 +36,3 @@ class Explosion(pygame.sprite.Sprite):
                 self.kill()
             else:
                 self.image = expl_anim[self.size][self.frame]
-                center = self.rect.center
-                self.rect = self.image.get_rect()
-                self.rect.center = center

@@ -2,46 +2,36 @@
 
 import pygame
 import random
-
-from player import all_sprites
+from building import all_sprites
 from setting import *
 
-names = locals()
-fire_img = []
-
-for i in range(0, 6):
-    names['fire_image%s' % i] = pygame.transform.scale(pygame.image.load("img/fire/fire_%s.png" % i),(140,112))
-    fire_img.append(names['fire_image%s' % i])
+fire_img = [pygame.transform.scale(pygame.image.load(f"img/fire/fire_{i}.png"),(140,112)) for i in range(6)]
 fires = pygame.sprite.Group()
 
 class Fire(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.num = 0
-        self.image = fire_img[self.num]
+        self.frame = 0
+        self.image = fire_img[self.frame]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.height = self.image.get_height()
         self.radius = int(self.rect.width * 0.85 / 2)
-        # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.x = random.randrange(WIDTH + 100, WIDTH + 800)
         self.rect.bottom = HEIGHT - 50
-        self.count = 0
         self.speed_fire = SPEED
+        self.last_update = pygame.time.get_ticks()
+        self.frame_rate = 200
 
     def update(self):
         self.rect.move_ip(-self.speed_fire, 0)
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            self.image = fire_img[self.frame % 6] 
         if self.rect.right < 0:
             self.kill()
             new_fire()
-
-        self.count += 1
-        if self.count % 8 == 0:
-            self.count = 0
-            self.num += 1
-            if self.num % 6 == 0:
-                self.num = 0
-            self.image = fire_img[self.num]
 
 #生成新的火
 def new_fire():

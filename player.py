@@ -1,38 +1,31 @@
 '''貓貓 (主角)'''
 
 import pygame
-from bullet import Bullet
-from waterball import Waterball
+from projectile import Projectile
 from soundset import play_sound
 from setting import *
 from building import all_sprites
 
-names = locals()
-player_img = []
-for i in range(1, 9):
-    names['cat_image%s' % i] = pygame.transform.scale(pygame.image.load("img/player/run-%s.png" % i), (150, 150))
-    player_img.append(names['cat_image%s' % i])
-
+player_img = [pygame.transform.scale(pygame.image.load(f"img/player/run-{i}.png"), (150, 150)) for i in range(1, 9)]
 bullets = pygame.sprite.Group()
 waterballs = pygame.sprite.Group()
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self) # 精靈
+        pygame.sprite.Sprite.__init__(self)
         self.num = 0
+        self.time = pygame.time.get_ticks()
         self.image = player_img[self.num]
         self.image.set_colorkey(BLACK)
-        # self.image.set_colorkey(WHITE) # 透明度
         self.rect = self.image.get_rect()
-        self.radius = 35
         self.rect.centerx = 100
         self.rect.bottom = HEIGHT - 30
+        self.radius = 35
         self.speedx = 8
-        self.vel_y = 0
-        self.health = 100000
-        self.gun = 1
+        self.vel_y = 0 # 模擬重力
+        self.health = 100
+        self.gun = 1 # 單發或雙發
         self.gun_time = 0
-        self.count = 0
 
         self.jump_counter = 0
         self.jumped = False
@@ -55,70 +48,19 @@ class Player(pygame.sprite.Sprite):
         surf.blit(surface, (0, 0))
         if self.k_range < self.k_range_max:
             self.k_range += 60
-        elif self.k_range == self.k_range_max:
+        else:
             self.k_range = 100
-
-    def update(self):
-        now = pygame.time.get_ticks()
-        if self.gun == 2 and now - self.gun_time > 5000:
-            self.gun -= 1
-            self.gun_time = now
-
-        key_pressed = pygame.key.get_pressed()
-
-        if self.rect.bottom == (HEIGHT - 30):
-            self.jump_counter = 0
-
-        # 二段跳
-        if key_pressed[pygame.K_w] or key_pressed[pygame.K_SPACE]:
-            if (not self.jumped) and 550 < self.rect.bottom <= (HEIGHT - 30):
-                if self.jump_counter < 2:
-                    self.vel_y = -22
-                    play_sound("sfx\smb_jump-small.wav")
-                    self.jump_counter += 1
-                self.jumped = True
-
-        if not key_pressed[pygame.K_SPACE] and not key_pressed[pygame.K_w]:
-            self.jumped = False
-
-        if key_pressed[pygame.K_d]:
-            self.rect.x += self.speedx
-        if key_pressed[pygame.K_a]:
-            self.rect.x -= self.speedx
-
-        self.vel_y += 0.8
-        if self.vel_y > 10:
-            self.vel_y = 10
-        self.rect.y += self.vel_y
-
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-
-        if self.rect.bottom > HEIGHT - 30:
-            self.rect.bottom = HEIGHT - 30
-        if self.rect.top < 0:
-            self.rect.top = 0
-
-        self.count += 1
-        if self.count % 10 == 0:
-            self.count = 0
-            self.num += 1
-            if self.num % 8 == 0:
-                self.num = 0
-            self.image = player_img[self.num]
 
     # 射子彈
     def shoot(self):
         play_sound("sfx\smb_fireball.wav")
         if self.gun == 1:
-            bullet = Bullet(self.rect.centerx, self.rect.top)
+            bullet = Projectile(self.rect.centerx, self.rect.top, 'bullet')
             all_sprites.add(bullet)
             bullets.add(bullet)
-        elif self.gun >= 2:
-            bullet1 = Bullet(self.rect.centerx, self.rect.top)
-            bullet2 = Bullet(self.rect.centerx, self.rect.bottom)
+        elif self.gun == 2:
+            bullet1 = Projectile(self.rect.centerx, self.rect.top, 'bullet')
+            bullet2 = Projectile(self.rect.centerx, self.rect.bottom, 'bullet')
             all_sprites.add(bullet1)
             all_sprites.add(bullet2)
             bullets.add(bullet1)
@@ -126,12 +68,60 @@ class Player(pygame.sprite.Sprite):
 
     # 射水球
     def shootwater(self):
-        waterball = Waterball(self.rect.left, self.rect.centery)
         play_sound("sfx\smw_swimming.wav")
+        waterball = Projectile(self.rect.left, self.rect.centery, 'waterball')
         all_sprites.add(waterball)
         waterballs.add(waterball)
 
     # 武器升級成雙彈
     def gunup(self):
-        self.gun += 1
+        self.gun = 2
         self.gun_time = pygame.time.get_ticks()
+        
+    def update(self):
+        # 雙彈時間
+        now = pygame.time.get_ticks()
+        if self.gun == 2 and now - self.gun_time > 5000:
+            self.gun = 1
+            self.gun_time = now
+        
+        # 回到原地
+        if self.rect.bottom == (HEIGHT - 30):
+            self.jump_counter = 0
+
+        # 二段跳
+        key_pressed = pygame.key.get_pressed()
+        if key_pressed[pygame.K_w] or key_pressed[pygame.K_SPACE]:
+            if (not self.jumped) and self.rect.bottom <= (HEIGHT - 30):
+                if self.jump_counter < 2:
+                    play_sound("sfx\smb_jump-small.wav")
+                    self.vel_y = -22
+                    self.jump_counter += 1
+                self.jumped = True
+
+        if not key_pressed[pygame.K_SPACE] and not key_pressed[pygame.K_w]:
+            self.jumped = False
+
+        self.vel_y += 0.8
+        if self.vel_y > 10:
+            self.vel_y = 10
+        self.rect.y += self.vel_y
+
+        if key_pressed[pygame.K_d]:
+            self.rect.x += self.speedx
+        if key_pressed[pygame.K_a]:
+            self.rect.x -= self.speedx
+
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.bottom > HEIGHT - 30:
+            self.rect.bottom = HEIGHT - 30
+        if self.rect.top < 0:
+            self.rect.top = 0
+        
+        if now - self.time > 300:
+            self.time = now
+            self.num += 1
+            self.image = player_img[self.num % len(player_img)]

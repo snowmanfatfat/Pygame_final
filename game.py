@@ -25,17 +25,16 @@ talk_list = ["本喵喘口氣 . . . 喵呼 . . .", # 暫停的對話
             "喵呼 . . . 累得跟貓一樣 . . . ",
             "呼嚕 . . . 呼嚕 . . . ",
             "休息是為了吃更多罐罐喵 . . . "]
+BAR_LENGTH = 200
+BAR_HEIGHT = 20
 
 class Game:
     def __init__(self):
         # 設定字型
         self.font_name = os.path.join("ttf","HanyiSentyPagoda.ttf")
-        self.init_moment = time.time()
-        self.stop_time = 0 # 暫停的時間戳記
-        self.init_time = 0 # 倒數完後遊戲開始的時間
-        self.stop_time_count = 0 # 暫停了多久
         self.update_rate = 0.9 # 生成補給品的機率
-        self.new_time = 0 # 按下重來後的時間戳記
+        self.time = 0 # 按下重來後的時間戳記
+        self.stop_time_count = 0
 
         self.speedup = 0 # 加速
         self.pause = False # 暫停
@@ -50,10 +49,8 @@ class Game:
         self.kill_all = False # 要不要通殺
 
         # button
-        self.end_img = end_img
-        self.end_btn = Buttons(95, 680, 295, 110)  # x, y, width, height
-        self.again_img = again_img
-        self.again_btn = Buttons(95, 580, 295, 110)
+        self.end_btn = Buttons(end_img, 95, 680)  # x, y, width, height
+        self.again_btn = Buttons(again_img, 95, 580)
         self.mouse_img = mouse_img
         
         self.tips_list = tips_list
@@ -78,10 +75,7 @@ class Game:
 
     # 畫生命值
     def draw_health(self, surf, hp, x, y):
-        if hp < 0:
-            hp = 0
-        BAR_LENGTH = 200
-        BAR_HEIGHT = 20
+        hp = max(hp, 0)
         fill = (hp/100) * BAR_LENGTH
         outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
         fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
@@ -92,14 +86,11 @@ class Game:
         else:
             pygame.draw.rect(surf, RED, fill_rect)
 
-        pygame.draw.rect(surf, WHITE, outline_rect, 2)
+        pygame.draw.rect(surf, WHITE, outline_rect, 2) # 若有填數字例如2，則會變成邊框寬度為2的矩形，若沒有填則會變成實心矩形
 
-    def draw_weapon_time(self, surf, t, total_t, x, y):
-        if t < 0:
-            t = 0
-        BAR_LENGTH = 200
-        BAR_HEIGHT = 20
-        colorlist = [(111, 159, 255),
+    def draw_shield_time(self, surf, t, total_t, x, y):
+        t = max(t, 0)
+        colorlist = [(111, 159, 255), # 顏色漸層 這是藍色
                      (94, 137, 255),
                      (64, 94, 152),
                      (43, 62, 101),
@@ -111,50 +102,42 @@ class Game:
             pygame.draw.rect(surf, (240, 240, 240), fill_rect)
         elif fill >= (80/100)*BAR_LENGTH:
             pygame.draw.rect(surf, colorlist[0], fill_rect)
-        elif (80/100)*BAR_LENGTH > fill >= (60/100)*BAR_LENGTH :
+        elif fill >= (60/100)*BAR_LENGTH :
             pygame.draw.rect(surf, colorlist[1], fill_rect)
-        elif (60/100)*BAR_LENGTH > fill >= (40/100)*BAR_LENGTH :
+        elif fill >= (40/100)*BAR_LENGTH :
             pygame.draw.rect(surf, colorlist[2], fill_rect)
-        elif (40/100)*BAR_LENGTH > fill >= (20/100)*BAR_LENGTH :
+        elif fill >= (20/100)*BAR_LENGTH :
             pygame.draw.rect(surf, colorlist[3], fill_rect)
-        elif (20/100)*BAR_LENGTH > fill:
-            pygame.draw.rect(surf, colorlist[4], fill_rect)
-
-        if (20/100)*BAR_LENGTH > fill >= (15/100)*BAR_LENGTH:
-            # 提示防護罩即將失效
-            pygame.draw.rect(surf, colorlist[4], outline_rect, 2)
         else:
-            pygame.draw.rect(surf, WHITE, outline_rect, 2)
+            pygame.draw.rect(surf, colorlist[4], fill_rect)
+        pygame.draw.rect(surf, WHITE, outline_rect, 2)
 
-    #畫遊戲時間
-    def draw_time(self):
-        time = self.time - self.new_time
-        second = time // 1000
-        minute = second // 60
-        minute = str(minute).zfill(2)
-        second_1 = second % 60
-        second_1 = str(second_1).zfill(2)
-        my_text = f'{minute}' + ':' + f'{second_1}'
-        return my_text
+    # 算遊戲時間
+    def time_text(self):
+        second = self.time // 1000
+        minute = str(second // 60).zfill(2)
+        second_1 = str(second % 60).zfill(2)
+        time_text = f'{minute}:{second_1}'
+        return time_text
 
-    # 顯示準備時間
-    def draw_ready_time(self):
-        sec = int((time.time() - self.init_moment) // 1)
+    # 算準備時間
+    def ready_time(self):
+        sec = (pygame.time.get_ticks() - self.init_time)//1000
         return sec
 
     # 顯示暫停畫面
     def draw_pause(self, surf, num=0, size_big=80, size_small=40):
         surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        pygame.draw.rect(surface, (128, 128, 128, 160), [0, 0, WIDTH, HEIGHT])
-
+        pygame.draw.rect(surface, (128, 128, 128, 160), [0, 0, WIDTH, HEIGHT]) # 128,128,128是灰色，160是透明度
+        
         font = pygame.font.Font(self.font_name, size_big)
-        text_surf_1 = font.render(self.talk_list[num], True, WHITE)
+        text_surf_1 = font.render(self.talk_list[num], True, WHITE) # True是開啟反鋸齒
         text_rect_1 = text_surf_1.get_rect()
         text_rect_1.centerx = WIDTH / 2
         text_rect_1.top = HEIGHT / 2 - 90
 
         font = pygame.font.Font(self.font_name, size_small)
-        text_surf_2 = font.render("按下 p 鍵可繼續遊戲", True, WHITE)
+        text_surf_2 = font.render("按下 p 鍵可繼續遊戲", True, WHITE) 
         text_rect_2 = text_surf_2.get_rect()
         text_rect_2.centerx = WIDTH / 2
         text_rect_2.top = HEIGHT / 2 + 60
@@ -162,31 +145,29 @@ class Game:
         if not self.show_ready:
             surf.blit(surface, (0, 0))
             surf.blit(text_surf_1, text_rect_1)
-            surf.blit(text_surf_2, text_rect_2)
+            surf.blit(text_surf_2, text_rect_2) 
         else:
-            countdown = str(3 - self.draw_ready_time())
-            if self.draw_ready_time() >= 3:
+            sec = self.ready_time()
+            countdown = str(3 - sec)
+            if sec > 2:
                 countdown = "GO!"
-
             font = pygame.font.Font(self.font_name, 400)
             text_surf = font.render(countdown, True, WHITE)
             text_rect = text_surf.get_rect()
             text_rect.centerx = WIDTH / 2 - 20
             text_rect.top = HEIGHT / 2 - 320
-
             surf.blit(surface, (0, 0))
             surf.blit(text_surf, text_rect)
 
     # 畫gameover頁面
-    def draw_close(self, surf, num = 0):
+    def draw_close(self, surf, num=0):
         font = pygame.font.Font(self.font_name, 60)
         text_surf_1 = font.render("本次挑戰分數", True, RED1)
         text_rect_1 = text_surf_1.get_rect()
         text_rect_1.left = 60
         text_rect_1.top = 380
 
-        font = pygame.font.Font(self.font_name, 60)
-        text_surf_2 = font.render("「 " + str(self.score) + " 分 」", True, RED1)
+        text_surf_2 = font.render(f"「{self.score}分」", True, RED1)
         text_rect_2 = text_surf_2.get_rect()
         text_rect_2.centerx = text_rect_1.centerx
         text_rect_2.top = 480
@@ -194,8 +175,8 @@ class Game:
         surf.blit(self.tips_list[num], (0, 0))
         surf.blit(text_surf_1, text_rect_1)
         surf.blit(text_surf_2, text_rect_2)
-        surf.blit(self.again_img, (100, 580))
-        surf.blit(self.end_img, (100, 680))
+        surf.blit(self.again_btn.img, (100, 580))
+        surf.blit(self.end_btn.img, (100, 680))
     
     # 類變量，不用實例化就可以使用，對於不會改變的變量，可以直接寫在類裡面，若改變了則會影響所有實例
     ground = Ground()
@@ -220,6 +201,7 @@ class Game:
 
         while self.running:
             clock.tick(FPS)
+
             while self.close: # 掛了的時候才會變成True
                 pygame.event.set_grab(False)
 
@@ -232,11 +214,11 @@ class Game:
                         self.close = False
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        if self.end_btn.clicked(x, y):
+                        if self.end_btn.is_clicked(x, y):
                             self.running = False
                             self.close = False
 
-                        if self.again_btn.clicked(x, y):
+                        if self.again_btn.is_clicked(x, y):
                             self.__init__()
                             self.protect.__init__() # 沒有實例變量就會搜群類變量
                             self.ground.__init__()
@@ -261,10 +243,9 @@ class Game:
                             for i in range(1):
                                 new_building()
 
-                            self.new_time = pygame.time.get_ticks()
-
-                            self.close = False
-
+                            self.init_time = pygame.time.get_ticks()
+                            self.start = False
+   
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
@@ -313,41 +294,30 @@ class Game:
                             self.player.shoot()
                         elif event.button == 3:
                             self.player.shootwater()
+            
+            # 畫面顯示
+            screen.fill(BLACK)
+            self.ground.draw(screen)
+            all_sprites.draw(screen)
 
-            # 滑鼠控制
-            if self.pause:
-                pygame.event.set_grab(False)
-                pygame.mouse.set_visible(True)
-                self.draw_pause(screen, self.rand_num)
-            else:
-                x, y = pygame.mouse.get_pos()
-                x = max(0, min(x, WIDTH))
-                y = max(0, min(y, HEIGHT))
-                pygame.event.set_grab(True) # 限制滑鼠在視窗內
-                if not self.close:
-                    pygame.mouse.set_visible(False)
-                    self.draw_mouse(screen, x, y)
-
-            if self.close:
-                pygame.event.set_grab(False)
-                pygame.mouse.set_visible(True)
-                self.draw_close(screen, self.rand_num2)
+            # 倒數畫面
+            if self.show_ready:
+                play_sound("sfx\countdown.wav")
+                self.pause = True
+                ready_time = self.ready_time()
+                if ready_time >= 4:
+                    self.show_ready = False
+                    self.pause = False
+                    self.stop_time_count = 4 * 1000
 
             # 更新遊戲
-            now = pygame.time.get_ticks()
             if self.running and not self.pause:
-                self.time = now - self.stop_time_count - self.init_time # 如果不減去self.init_time，會把遊戲還沒按開始的時間也算進去
+                self.time = pygame.time.get_ticks() - self.stop_time_count - self.init_time
                 all_sprites.update()
                 self.ground.update()
                 self.protect.update()
-
-            elif not self.show_ready:
-                self.time = self.time
-            else:
-                self.time = self.time
-
-            # 更換背景，2分鐘換一次
-            if ((self.time - self.new_time) //1000 % 60 == 59) and self.change:
+                # 更換背景，2分鐘換一次
+            if (self.time//1000 % 5 == 0 and self.time//1000 != 0)  and self.change:
                 self.ground.change_ground()
                 self.last_change = time.time()
                 self.change = False
@@ -359,17 +329,6 @@ class Game:
                 f.speed_fire = SPEED + self.speedup
             for b in buildings.sprites():
                 b.speed_build = SPEED + self.speedup
-
-            # 準備畫面
-            if self.show_ready:
-                play_sound("sfx\countdown.wav")
-                self.pause = True
-                
-                ready_time = self.draw_ready_time()
-                if ready_time >= 4:
-                    self.show_ready = False
-                    self.pause = False
-                    self.stop_time_count = 4 * 1000
 
             if not self.player.protected:
                 # 判斷石頭與主角相撞，player用self.player，而石頭就要用rocks，因為石頭是一個list，而player是一個物件
@@ -385,7 +344,7 @@ class Game:
                         death_expl = Explosion(self.player.rect.center, 'player')
                         all_sprites.add(death_expl)
                         play_sound("sfx\dead1.wav")
-
+                
                 # 判斷火與主角相撞
                 hits = pygame.sprite.spritecollide(self.player, fires, True, pygame.sprite.collide_circle)
                 for hit in hits:
@@ -401,7 +360,7 @@ class Game:
                         play_sound("sfx\dead1.wav")
 
                 # 判斷建築物與主角相撞
-                hits = pygame.sprite.spritecollide(self.player, buildings, True) # 檢測矩形邊界是否相撞
+                hits = pygame.sprite.spritecollide(self.player, buildings, True, pygame.sprite.collide_circle)
                 for hit in hits: 
                     new_building()
                     play_sound("sfx/smb_bump.wav")
@@ -426,7 +385,7 @@ class Game:
                 if (self.score % 100 == 0) and (self.score != 0):
                     self.ground.ground_speed += 2
                     self.speedup += 2
-                    for i in range(1):
+                    for _ in range(1):
                         new_rock()
                         new_fire()
                     self.update_rate -= 0.02
@@ -485,11 +444,6 @@ class Game:
                 self.close = True
                 self.show_ready = True
 
-            # 畫面顯示
-            screen.fill(BLACK)
-            self.ground.draw(screen)
-            all_sprites.draw(screen)
-
             # 防護罩
             self.player.protected = self.protect.activated
             if self.player.protected:
@@ -503,25 +457,34 @@ class Game:
                 self.player.draw_kill_all(screen)
                 if self.player.k_range == 100:
                     self.kill_all = False
-
+            
             self.draw_health(screen, self.player.health, 50, 20)
-            self.draw_weapon_time(screen, self.protect.total_time, self.protect.max_time, 50, 50)
-
-            self.draw_text(screen, BLACK, self.draw_time(), 40, WIDTH / 2 - 10, 15)
+            self.draw_shield_time(screen, self.protect.total_time, self.protect.max_time, 50, 50)
+            self.draw_text(screen, BLACK, self.time_text(), 40, WIDTH / 2 - 10, 15)
             self.draw_text(screen, BLACK, str(self.score).zfill(6), 40, WIDTH - 150, 15) # 分數轉文字再補齊6位數
-
-            #滑鼠圖示顯示
-            if not self.pause and not self.close:
-                pygame.mouse.set_visible(False)
-                self.draw_mouse(screen, x, y)
-
+            
+            # 滑鼠控制
+            if self.pause:
+                pygame.event.set_grab(False)
+                pygame.mouse.set_visible(True)
+                self.draw_pause(screen, self.rand_num)
+            else:
+                x, y = pygame.mouse.get_pos()
+                x = max(0, min(x, WIDTH))
+                y = max(0, min(y, HEIGHT))
+                pygame.event.set_grab(True) # 限制滑鼠在視窗內
+                if not self.close:
+                    pygame.mouse.set_visible(False)
+                    self.draw_mouse(screen, x, y)
+            
             if self.close:
+                pygame.event.set_grab(False)
                 pygame.mouse.set_visible(True)
                 self.draw_close(screen, self.rand_num2)
 
-            # if self.player.health <= 0 and (self.time - self.new_time) <= 3000:
+            # if self.player.health <= 0 and (self.time - self.init_time) <= 3000:
             #     print("虐貓小廚")
-            # if self.counter == 100 and (self.time - self.new_time) <= 10000:
+            # if self.counter == 100 and (self.time - self.init_time) <= 10000:
             #     print("百步穿楊")
 
             pygame.display.update()
