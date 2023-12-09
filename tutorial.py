@@ -43,9 +43,9 @@ class Tutorial:
         while run:
             clock.tick(FPS)
             self.draw(self.page, self.menu_win)
-            if self.page == 1:
+            if self.page == 0:
                 self.fire_ani(self.menu_win)
-            elif self.page == 3:
+            elif self.page == 2:
                 self.draw2(self.menu_win)
 
             # x, y = pygame.mouse.get_pos()

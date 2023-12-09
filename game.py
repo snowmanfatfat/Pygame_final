@@ -25,6 +25,7 @@ talk_list = ["本喵喘口氣 . . . 喵呼 . . .", # 暫停的對話
             "喵呼 . . . 累得跟貓一樣 . . . ",
             "呼嚕 . . . 呼嚕 . . . ",
             "休息是為了吃更多罐罐喵 . . . "]
+wins_list = [pygame.transform.scale(pygame.image.load(os.path.join("img/end/wins", f"wins-{i}.png")), (WIDTH, HEIGHT)) for i in range(3)] # 獲勝的畫面有不同圖片
 BAR_LENGTH = 200
 BAR_HEIGHT = 20
 
@@ -53,10 +54,12 @@ class Game:
         self.again_btn = Buttons(again_img, 95, 580)
         self.mouse_img = mouse_img
         
-        self.tips_list = tips_list
-        self.rand_num2 = 0 # 隨機死亡畫面
         self.talk_list = talk_list
         self.rand_num = 0 # 隨機對話
+        self.tips_list = tips_list
+        self.rand_num2 = 0 # 隨機死亡畫面
+        self.wins_list = wins_list
+        self.rand_num3 = 0 # 隨機獲勝畫面
         
     # 顯示文字(時間和分數)
     def draw_text(self, surf, color , text, size, x, y):
@@ -171,13 +174,16 @@ class Game:
         text_rect_2 = text_surf_2.get_rect()
         text_rect_2.centerx = text_rect_1.centerx
         text_rect_2.top = 480
-
-        surf.blit(self.tips_list[num], (0, 0))
+        
+        if self.player.health <= 0:
+            surf.blit(self.tips_list[num], (0, 0))
+        elif self.score >= 10:
+            surf.blit(self.wins_list[num], (0, 0))
         surf.blit(text_surf_1, text_rect_1)
         surf.blit(text_surf_2, text_rect_2)
         surf.blit(self.again_btn.img, (100, 580))
         surf.blit(self.end_btn.img, (100, 680))
-    
+
     # 類變量，不用實例化就可以使用，對於不會改變的變量，可以直接寫在類裡面，若改變了則會影響所有實例
     ground = Ground()
     player = Player()
@@ -204,7 +210,8 @@ class Game:
 
             while self.close: # 掛了的時候才會變成True
                 pygame.event.set_grab(False)
-
+                
+                self.rand_num3 = random.randrange(len(self.wins_list))
                 self.rand_num2 = random.randrange(len(self.tips_list))
                 x, y = pygame.mouse.get_pos()
 
@@ -440,7 +447,7 @@ class Game:
                 new_fire()
 
             # 讓動畫播完再結束遊戲
-            if self.player.health <= 0 and not (death_expl.alive()):
+            if (self.player.health <= 0 and not (death_expl.alive()) or self.score>=10) :
                 self.close = True
                 self.show_ready = True
 
