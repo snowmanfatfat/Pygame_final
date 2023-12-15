@@ -2,12 +2,15 @@
 import pygame
 from setting import *
 
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
 ground_path = get_path("img/ground")
 ground_name = list(ground_path.keys())
 # print(ground_name)
 ground_img = {}
 for name in ground_name:
-    ground_img[name] = [pygame.transform.scale(pygame.image.load(path), (1440, 810)) for path in ground_path[name]]
+    ground_img[name] = [pygame.transform.scale(pygame.image.load(path).convert(), (1440, 810)) for path in ground_path[name]]
 
 class Ground:
     def __init__(self):

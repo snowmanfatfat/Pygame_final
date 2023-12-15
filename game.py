@@ -447,7 +447,7 @@ class Game:
                 new_fire()
 
             # 讓動畫播完再結束遊戲
-            if (self.player.health <= 0 and not (death_expl.alive()) or self.score>=10) :
+            if (self.player.health <= 0 and not (death_expl.alive()) or self.score>=1000) :
                 self.close = True
                 self.show_ready = True
 
@@ -488,11 +488,6 @@ class Game:
                 pygame.event.set_grab(False)
                 pygame.mouse.set_visible(True)
                 self.draw_close(screen, self.rand_num2)
-
-            # if self.player.health <= 0 and (self.time - self.init_time) <= 3000:
-            #     print("虐貓小廚")
-            # if self.counter == 100 and (self.time - self.init_time) <= 10000:
-            #     print("百步穿楊")
 
             pygame.display.update()
 
