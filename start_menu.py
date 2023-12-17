@@ -10,11 +10,11 @@ pygame.init()
 pygame.mixer.init()
 
 start_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"start.png")), (285, 100))
-end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"end.png")), (285, 100))
+# end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"end.png")), (285, 100))
 setting_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"setting.png")), (70, 70))
-# setting_bg = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"setting_bg.png")), (200, 400))
 
-title_anim = [pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu/title", f"title-ani-{i}.png")), (WIDTH, HEIGHT)) for i in range(20)]
+title_path = get_path("img/start_menu/title1")
+title_anim = [pygame.transform.scale(pygame.image.load(path), (WIDTH, HEIGHT)) for path in title_path['title1']]
 
 class StartMenu:
     def __init__(self):
@@ -30,8 +30,8 @@ class StartMenu:
         
         self.last_update = time.time()
         self.frame_rate = 0.1 # 每0.1秒換一張圖
-        self.start_btn = Buttons(start_img, WIDTH // 2 - 142.5, 550)
-        self.end_btn = Buttons(end_img, WIDTH // 2 - 142.5, 650)
+        self.start_btn = Buttons(start_img, 867, 208)
+        # self.end_btn = Buttons(end_img, WIDTH // 2 - 142.5, 650)
         self.setting_btn = Buttons(setting_img, WIDTH - 95, 50)
         self.volume = 0.4
 
@@ -42,8 +42,8 @@ class StartMenu:
     
     def draw(self, surf):
         surf.blit(self.title_img, (0, 0))
-        surf.blit(self.start_btn.img, self.start_btn.rect)
-        surf.blit(self.end_btn.img, self.end_btn.rect)
+        # surf.blit(self.start_btn.img, self.start_btn.rect)
+        # surf.blit(self.end_btn.img, self.end_btn.rect)
         surf.blit(self.setting_btn.img, self.setting_btn.rect)
 
     def update_animation(self):
@@ -57,7 +57,7 @@ class StartMenu:
         pygame.init()
         run = True
         clock = pygame.time.Clock()
-        pygame.display.set_caption("貓貓救援大作戰")
+        pygame.display.set_caption("家裡放煙火囉")
         self.play_music()
 
         while run:
@@ -74,8 +74,8 @@ class StartMenu:
                     if self.setting_btn.is_clicked(x, y):
                         self.setting_menu.setting_show(self.menu_win)
                     
-                    if self.end_btn.is_clicked(x, y):
-                        run = False
+                    # if self.end_btn.is_clicked(x, y):
+                    #     run = False
 
                     if self.start_btn.is_clicked(x, y):
                         ttl = Tutorial()

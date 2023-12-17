@@ -6,7 +6,10 @@ from soundset import play_sound
 from setting import *
 from building import all_sprites
 
-player_img = [pygame.transform.scale(pygame.image.load(f"img/player/run-{i}.png"), (150, 150)) for i in range(1, 9)]
+# screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+player_path = get_path("img/player/new")
+player_img = [pygame.transform.scale(pygame.image.load(path), (250, 300)) for path in player_path['new']]
 bullets = pygame.sprite.Group()
 
 class Player(pygame.sprite.Sprite):
@@ -15,11 +18,12 @@ class Player(pygame.sprite.Sprite):
         self.num = 0
         self.time = pygame.time.get_ticks()
         self.image = player_img[self.num]
-        self.image.set_colorkey(BLACK)
+        self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         self.rect.centerx = 100
         self.rect.bottom = HEIGHT - 30
-        self.radius = 35
+        self.radius = 70
+
         self.speedx = 8
         self.vel_y = 0 # 模擬重力
         self.health = 100
@@ -54,11 +58,11 @@ class Player(pygame.sprite.Sprite):
         # play_sound("sfx\smb_fireball.wav")
         play_sound("sfx\smw_swimming.wav")
         if self.gun == 1:
-            bullet = Projectile(self.rect.centerx, self.rect.top, 'bullet')
+            bullet = Projectile(self.rect.centerx, self.rect.centery, 'bullet')
             all_sprites.add(bullet)
             bullets.add(bullet)
         elif self.gun == 2:
-            bullet = Projectile(self.rect.left, self.rect.centery, 'water')
+            bullet = Projectile(self.rect.centerx, self.rect.centery, 'water')
             all_sprites.add(bullet)
             bullets.add(bullet)
 
@@ -79,6 +83,8 @@ class Player(pygame.sprite.Sprite):
         self.gun = 2
         
     def update(self):
+        # pygame.draw.circle(screen, RED, self.rect.center, self.radius, 1)
+        self.image.set_colorkey(WHITE)
         if self.health > 0:
             now = pygame.time.get_ticks()
             # 回到原地

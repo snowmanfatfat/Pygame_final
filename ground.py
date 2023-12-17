@@ -7,10 +7,15 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 ground_path = get_path("img/ground")
 ground_name = list(ground_path.keys())
-# print(ground_name)
-ground_img = {}
-for name in ground_name:
-    ground_img[name] = [pygame.transform.scale(pygame.image.load(path).convert(), (1440, 810)) for path in ground_path[name]]
+
+size = [(WIDTH, HEIGHT), (WIDTH, HEIGHT)]
+ground_img = {'1_': [], '2_': []}
+for i, path in enumerate(ground_path['1_']):
+    img = pygame.image.load(path).convert()
+    ground_img['1_'].append(pygame.transform.scale(img, size[i]))
+for path in ground_path['2_']:
+    img = pygame.image.load(path).convert()
+    ground_img['2_'].append(pygame.transform.scale(img, size[0]))
 
 class Ground:
     def __init__(self):
@@ -29,7 +34,7 @@ class Ground:
 
     def update(self):
         for i in range(len(self.imgs_rect)):
-            self.imgs_rect[i].left -= self.ground_speed
+            self.imgs_rect[i].left -= (self.ground_speed)
             if self.imgs_rect[i].right <= 0:
                 self.imgs_rect[i].left = WIDTH * (len(self.imgs_rect) - 1)
 

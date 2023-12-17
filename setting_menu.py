@@ -6,12 +6,14 @@ from buttons import Buttons
 sound_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"sound.png")), (60, 60))
 mute_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"mute.png")), (60, 60))
 end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"end.png")), (285, 100))
+bg_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"bg.png")), (WIDTH, HEIGHT))
 
 class SettingMenu:
     def __init__(self):
         self.font_name = os.path.join("ttf","HanyiSentyPagoda.ttf")
         self.sound_img = sound_img
         self.mute_img = mute_img
+        self.bg_img = bg_img
         self.circle_start = 0.4 * (360-90) + 90
         self.volume = 0.4
         self.volume_state = False
@@ -29,9 +31,6 @@ class SettingMenu:
     
     def draw(self, surf):
         surface = pygame.Surface((450,350), pygame.SRCALPHA)
-        
-        pygame.draw.rect(surface, LIGHT_BLUE, (0,0,450,350))
-        
         font = pygame.font.Font(self.font_name, 60)
         text_surface = font.render("Setting", True, BLACK)
         text_rect = text_surface.get_rect()
@@ -55,6 +54,7 @@ class SettingMenu:
             surface.blit(self.sound_btn.img, self.sound_btn.rect)
             pygame.mixer.music.unpause()
         surface.blit(self.end_btn.img, self.end_btn.rect)
+        surf.blit(self.bg_img, (0,0))
         surf.blit(surface, (self.x, self.y))
         
     def setting_show(self, surf):

@@ -6,7 +6,7 @@ from fire import fire_img
 from game import Game
 
 ttl_list = [pygame.transform.scale(pygame.image.load(os.path.join("img/tutorial", f"ttl-{i+1}.png")), (WIDTH, HEIGHT)) for i in range(5)]
-player_img = pygame.transform.scale(pygame.image.load("img/player/run-2.png"), (130, 130))
+player_img = pygame.transform.scale(pygame.image.load("img/player/new/fireman0.png"), (130, 130))
 
 class Tutorial:
     def __init__(self):

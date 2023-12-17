@@ -9,10 +9,15 @@ from setting import *
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+# rock_size = [(300,300), (200,200), (250,250), (300,300), (150,150), (200,200), (200,200), (200,200), (100,100), (120,120)]
 rock_imgs = []
-rock_size = [(300,300), (200,200), (250,250), (300,300), (150,150), (200,200), (200,200), (200,200), (100,100), (120,120)]
-for i in range(10):
-    rock_imgs.append(pygame.transform.scale(pygame.image.load(os.path.join("img/rock", f"rock{i}.png")).convert(), rock_size[i]))
+rock_size = [(120,120), (120,120), (120,120)]
+rock_path = get_path("img/rock")
+i = 0
+for path in rock_path['rock']:
+    img = pygame.image.load(path).convert()
+    rock_imgs.append(pygame.transform.scale(img, rock_size[i]))
+    i += 1
 
 rocks = pygame.sprite.Group()
 
@@ -36,6 +41,7 @@ class Rock(pygame.sprite.Sprite):
         self.total_degree += self.rot_degree
         self.total_degree = self.total_degree % 360
         self.image = pygame.transform.rotate(self.image_ori, self.total_degree) # 每次旋轉都是以原圖為基準，因為若用旋轉後的圖繼續旋轉，會越來越模糊
+        self.image.set_colorkey(BLACK)
         center = self.rect.center
         self.rect = self.image.get_rect()
         self.rect.center = center

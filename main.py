@@ -1,4 +1,4 @@
-'''貓貓救援大作戰'''
+'''家裡放煙火囉'''
 import pygame
 from start_menu import StartMenu
 

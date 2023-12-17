@@ -6,16 +6,20 @@ from setting import *
 
 BLACK = (0, 0, 0)
 
-expl_anim = {'lg':[], 'sm':[], 'player':[]}
-for i in range(9):
-    expl_img = pygame.image.load(os.path.join("img/explosion", f"expl{i}.png"))
-    expl_img.set_colorkey(BLACK)
-    expl_anim['lg'].append(pygame.transform.scale(expl_img, (150, 150)))
-    expl_anim['sm'].append(pygame.transform.scale(expl_img, (70, 70)))
-    player_expl_img = pygame.image.load(os.path.join("img/explosion", f"player_expl{i}.png"))
-    player_expl_img.set_colorkey(BLACK)
-    expl_anim['player'].append(player_expl_img)
+expl_path = get_path("img/explosion")
 
+expl_anim = {'lg': [], 'sm': [], 'player': []}
+
+for path in expl_path['expl']:
+    image = pygame.image.load(path)
+    image.set_colorkey(WHITE)
+    expl_anim['lg'].append(pygame.transform.scale(image, (200, 200)))
+    expl_anim['sm'].append(pygame.transform.scale(image, (150, 150)))
+    
+for path in expl_path['player']:
+    image = pygame.image.load(path)
+    image.set_colorkey(WHITE)
+    expl_anim['player'].append(pygame.transform.scale(image, (200, 200)))
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, center, size):
         pygame.sprite.Sprite.__init__(self)
@@ -26,10 +30,12 @@ class Explosion(pygame.sprite.Sprite):
         self.rect.center = center
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
+        self.frame_rate2 = 100
 
     def update(self):
         now = pygame.time.get_ticks()
-        if now - self.last_update > self.frame_rate:
+        frame_rate = self.frame_rate2 if self.size == 'player' else self.frame_rate
+        if now - self.last_update > frame_rate:
             self.last_update = now
             self.frame += 1
             if self.frame == len(expl_anim[self.size]):

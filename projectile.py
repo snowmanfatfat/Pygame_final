@@ -5,7 +5,7 @@ import os
 import math
 from setting import *
 
-bullet_big_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "PeaIce_0.png")), (108, 64))
+bullet_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "waterbullet.png")), (80, 80))
 water_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "watercolumn.png")), (108, 108))
 # waterball_big_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "PeaIce_0.png")), (108, 64))
 
@@ -14,7 +14,7 @@ class Projectile(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         c, d = pygame.mouse.get_pos()
         if type == 'bullet':
-            self.image = bullet_big_img
+            self.image = bullet_img
             self.speed = BULLET_SPEED
         elif type == 'water':
             self.image = water_img

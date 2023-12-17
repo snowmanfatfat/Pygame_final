@@ -5,17 +5,21 @@ import random
 from building import all_sprites
 from setting import *
 
-fire_img = [pygame.transform.scale(pygame.image.load(f"img/fire/fire_{i}.png"),(140,112)) for i in range(6)]
+# screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+fire_path = get_path("img/fire")
+fire_img = [pygame.transform.scale(pygame.image.load(path),(250,250)) for path in fire_path['fire']]
 fires = pygame.sprite.Group()
 
 class Fire(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.frame = 0
-        self.image = fire_img[self.frame]
+        self.anim = fire_img
+        self.image = fire_img[0]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.radius = int(self.rect.width * 0.85 / 2)
+        self.radius = int(self.rect.width * 0.7 / 2)
         self.rect.x = random.randrange(WIDTH + 100, WIDTH + 800)
         self.rect.bottom = HEIGHT - 50
         self.speed_fire = 0
@@ -23,12 +27,13 @@ class Fire(pygame.sprite.Sprite):
         self.frame_rate = 200
 
     def update(self):
+        # pygame.draw.circle(screen, RED, self.rect.center, self.radius, 1)
         self.rect.move_ip(-self.speed_fire, 0)
         now = pygame.time.get_ticks()
         if now - self.last_update > self.frame_rate:
             self.last_update = now
             self.frame += 1
-            self.image = fire_img[self.frame % 6] 
+            self.image = self.anim[self.frame % len(self.anim)] 
         if self.rect.right < 0:
             self.kill()
             new_fire()

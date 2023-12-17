@@ -15,19 +15,13 @@ from setting import *
 from buttons import Buttons
 from player import Player, bullets
 from mana import Mana
-from ultimate import Ultimate, WaterPower
+from ultimate import Ultimate
 from boss import Boss, fireballs
 
 end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/end", f"end.png")),(285, 100))
 again_img = pygame.transform.scale(pygame.image.load(os.path.join("img/end", f"again.png")),(285, 100))
-mouse_img = pygame.transform.scale(pygame.image.load(os.path.join("img", f"mouse.png")),(80, 80))
-tips_list = [pygame.transform.scale(pygame.image.load(os.path.join("img/end/tips", f"tips-{i}.png")), (WIDTH, HEIGHT)) for i in range(23)] # 死掉的畫面有不同圖片
-talk_list = ["本喵喘口氣 . . . 喵呼 . . .", # 暫停的對話
-            "本喵喝口水，休息一下 . . . ",
-            "好累 . . . 突然好想吃罐罐 . . . ",
-            "喵呼 . . . 累得跟貓一樣 . . . ",
-            "呼嚕 . . . 呼嚕 . . . ",
-            "休息是為了吃更多罐罐喵 . . . "]
+mouse_img = pygame.transform.scale(pygame.image.load(os.path.join("img", f"mouse1.png")),(100, 100))
+lose_img = pygame.transform.scale(pygame.image.load(os.path.join("img/end/lose/lose0.png")), (WIDTH, HEIGHT))
 wins_list = [pygame.transform.scale(pygame.image.load(os.path.join("img/end/wins", f"wins-{i}.png")), (WIDTH, HEIGHT)) for i in range(3)] # 獲勝的畫面有不同圖片
 BAR_LENGTH = 200
 BAR_HEIGHT = 20
@@ -36,7 +30,7 @@ class Game:
     def __init__(self):
         # 設定字型
         self.font_name = os.path.join("ttf","HanyiSentyPagoda.ttf")
-        self.update_rate = 0.5 # 生成補給品的機率
+        self.update_rate = 0.9 # 生成補給品的機率
         self.time = 0 # 按下重來後的時間戳記
         self.stop_time_count = 0
 
@@ -53,24 +47,25 @@ class Game:
         self.kill_all = False # 要不要通殺
 
         # button
-        self.end_btn = Buttons(end_img, 95, 680)  # x, y, width, height
-        self.again_btn = Buttons(again_img, 95, 580)
+        self.again_btn = Buttons(again_img, 60, 560)
+        self.end_btn = Buttons(end_img, 60, 660)
         self.mouse_img = mouse_img
-        
-        self.talk_list = talk_list
-        self.rand_num = 0 # 隨機對話
-        self.tips_list = tips_list
-        self.rand_num2 = 0 # 隨機死亡畫面
+        self.mouse_img.set_colorkey(WHITE)
+
+        self.lose_img = lose_img
         self.wins_list = wins_list
         self.rand_num3 = 0 # 隨機獲勝畫面
+        self.win = False
         
         self.is_shooting = False
         self.shooting_time = 0
         self.gun_time = 0
         
         self.ultimate = Ultimate()
-        self.boss = Boss()
         self.is_boss = False
+        self.is_death_expl2 = False
+        self.is_death_expl = False
+        self.boss = Boss()
         
     # 顯示文字(時間和分數)
     def draw_text(self, surf, color , text, size, x, y):
@@ -90,12 +85,16 @@ class Game:
     # 畫生命值
     def draw_health(self, surf, hp, x, y):
         hp = max(hp, 0)
-        fill = (hp/100) * BAR_LENGTH
-        outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+        bar_lenth = BAR_LENGTH if hp == self.player.health else BAR_LENGTH*1.8
+        if hp == self.player.health:
+            fill = (hp/100) * bar_lenth
+        else:
+            fill = (hp/1000) * bar_lenth
+        outline_rect = pygame.Rect(x, y, bar_lenth, BAR_HEIGHT)
         fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
-        if fill > (80/100)*BAR_LENGTH:
+        if fill > (80/100)*bar_lenth:
             pygame.draw.rect(surf, GREEN, fill_rect)
-        elif (79/100)*BAR_LENGTH > fill > (40/100)*BAR_LENGTH :
+        elif (79/100)*bar_lenth > fill > (40/100)*bar_lenth:
             pygame.draw.rect(surf, ORANGE, fill_rect)
         else:
             pygame.draw.rect(surf, RED, fill_rect)
@@ -139,26 +138,12 @@ class Game:
         return sec
 
     # 顯示暫停畫面
-    def draw_pause(self, surf, num=0, size_big=80, size_small=40):
+    def draw_pause(self, surf):
         surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
         pygame.draw.rect(surface, (128, 128, 128, 160), [0, 0, WIDTH, HEIGHT]) # 128,128,128是灰色，160是透明度
-        
-        font = pygame.font.Font(self.font_name, size_big)
-        text_surf_1 = font.render(self.talk_list[num], True, WHITE) # True是開啟反鋸齒
-        text_rect_1 = text_surf_1.get_rect()
-        text_rect_1.centerx = WIDTH / 2
-        text_rect_1.top = HEIGHT / 2 - 90
-
-        font = pygame.font.Font(self.font_name, size_small)
-        text_surf_2 = font.render("按下 p 鍵可繼續遊戲", True, WHITE) 
-        text_rect_2 = text_surf_2.get_rect()
-        text_rect_2.centerx = WIDTH / 2
-        text_rect_2.top = HEIGHT / 2 + 60
 
         if not self.show_ready:
             surf.blit(surface, (0, 0))
-            surf.blit(text_surf_1, text_rect_1)
-            surf.blit(text_surf_2, text_rect_2)
             self.stop_time = pygame.time.get_ticks() # get_ticks()是回傳從初始化__init__到現在使用get_ticks()的毫秒數
             if self.setting_menu.setting_show(screen):
                 self.pause = False
@@ -169,7 +154,7 @@ class Game:
             if sec > 2:
                 countdown = "GO!"
             font = pygame.font.Font(self.font_name, 400)
-            text_surf = font.render(countdown, True, WHITE)
+            text_surf = font.render(countdown, True, BLACK)
             text_rect = text_surf.get_rect()
             text_rect.centerx = WIDTH / 2 - 20
             text_rect.top = HEIGHT / 2 - 320
@@ -178,25 +163,18 @@ class Game:
 
     # 畫gameover頁面
     def draw_close(self, surf, num=0):
-        font = pygame.font.Font(self.font_name, 60)
-        text_surf_1 = font.render("本次挑戰分數", True, RED1)
-        text_rect_1 = text_surf_1.get_rect()
-        text_rect_1.left = 60
-        text_rect_1.top = 380
+        font = pygame.font.Font(self.font_name, 100)
 
-        text_surf_2 = font.render(f"「{self.score}分」", True, RED1)
-        text_rect_2 = text_surf_2.get_rect()
-        text_rect_2.centerx = text_rect_1.centerx
-        text_rect_2.top = 480
+        text_surf = font.render(f"{self.score}", True, WHITE)
+        text_rect = text_surf.get_rect()
+        text_rect.centerx = 241
+        text_rect.centery = 268
         
-        if self.player.health <= 0:
-            surf.blit(self.tips_list[num], (0, 0))
-        elif self.score >= 10:
+        if self.win:
             surf.blit(self.wins_list[num], (0, 0))
-        surf.blit(text_surf_1, text_rect_1)
-        surf.blit(text_surf_2, text_rect_2)
-        surf.blit(self.again_btn.img, (100, 580))
-        surf.blit(self.end_btn.img, (100, 680))
+        else:
+            surf.blit(self.lose_img, (0, 0))
+        surf.blit(text_surf, text_rect)
         
     def get_new_entity(self, group):
         if group == rocks:
@@ -211,20 +189,37 @@ class Game:
     def player_collision(self, group, damage, sound, explosion_type): # 判斷石頭與主角相撞，player用self.player，而石頭就要用rocks，因為石頭是一個list，而player是一個物件
         hits = pygame.sprite.spritecollide(self.player, group, True, pygame.sprite.collide_circle) # 檢測圓形邊界是否相撞，有相撞的話就刪除(True)，且回傳一個list
         for hit in hits: # 檢查單一物件和組之間的碰撞
-            new_entity = self.get_new_entity(group)
-            new_entity()
+            if group != fireballs:
+                new_entity = self.get_new_entity(group)
+                new_entity()
             play_sound(sound)
             self.player.health -= damage
-            expl = Explosion(hit.rect.center, explosion_type)
-            all_sprites.add(expl)
-            if self.player.health <= 0:
+            self.expl = Explosion(hit.rect.center, explosion_type)
+            all_sprites.add(self.expl)
+            if self.player.health <= 0 and not self.is_death_expl:
+                self.is_death_expl = True
                 self.player.health = 0
                 self.death_expl = Explosion(self.player.rect.center, 'player')
                 all_sprites.add(self.death_expl)
                 play_sound("sfx\dead1.wav")
-                
+    
+    def boss_collision(self, group, damage, sound, explosion_type):
+        hits = pygame.sprite.spritecollide(self.boss, group, True, pygame.sprite.collide_circle)
+        for hit in hits: # 檢查單一物件和組之間的碰撞
+            play_sound(sound)
+            self.boss.hp -= damage
+            if self.boss.hp > 0:
+                self.expl = Explosion(hit.rect.center, explosion_type)
+                all_sprites.add(self.expl)
+            if self.boss.hp <= 0 and not self.is_death_expl2:
+                self.is_death_expl2 = True
+                self.death_expl2 = Explosion(self.boss.rect.center, 'player')
+                all_sprites.add(self.death_expl2)
+                play_sound("sfx\dead1.wav")
+                self.score += 10000
+    
     def calculate_score(self):
-        if (self.score % 100 == 0) and (self.score != 0):
+        if (self.score % 50 == 0) and (self.score != 0):
             for _ in range(1):
                 new_rock()
                 new_fire()
@@ -240,11 +235,12 @@ class Game:
             hits = pygame.sprite.groupcollide(name, group, True, True, pygame.sprite.collide_circle) # 檢查組跟組之間的碰撞
         for hit in hits:
             self.score += 1
-            new_entity = self.get_new_entity(group)
-            new_entity()
+            if group != fireballs:
+                new_entity = self.get_new_entity(group)
+                new_entity()
             play_sound(sound)
-            expl = Explosion(hit.rect.center, 'lg')
-            all_sprites.add(expl)
+            self.expl = Explosion(hit.rect.center, 'lg')
+            all_sprites.add(self.expl)
             self.calculate_score()
             if group == rocks:
                 if random.random() > self.update_rate:
@@ -281,7 +277,6 @@ class Game:
                 pygame.event.set_grab(False)
                 
                 self.rand_num3 = random.randrange(len(self.wins_list))
-                self.rand_num2 = random.randrange(len(self.tips_list))
                 x, y = pygame.mouse.get_pos()
 
                 for event in pygame.event.get():
@@ -290,6 +285,7 @@ class Game:
                         self.close = False
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
+                        print(x, y)
                         if self.end_btn.is_clicked(x, y):
                             self.running = False
                             self.close = False
@@ -297,6 +293,7 @@ class Game:
                         if self.again_btn.is_clicked(x, y):
                             self.boss.kill()
                             self.ultimate.kill()
+                            self.expl.kill()
                             self.__init__()
                             self.mana.__init__() # 沒有實例變量就會搜群類變量
                             self.ground.__init__()
@@ -331,7 +328,6 @@ class Game:
                         
                     if event.key == pygame.K_p:
                         self.pause = not self.pause
-                        self.rand_num = random.randrange(len(self.talk_list))
                         if self.pause == True:
                             play_sound("sfx/smb_pause.wav")
 
@@ -377,7 +373,6 @@ class Game:
                             # self.mana.activated = True
                             self.mana.total_time = 0
                             self.ultimate = Ultimate(self.player.rect.centerx, self.player.rect.centery)
-                            waterpower = WaterPower(self.player.rect.centerx, self.player.rect.centery)
                             all_sprites.add(self.ultimate)
                             
                 if event.type == pygame.MOUSEBUTTONUP:
@@ -389,8 +384,6 @@ class Game:
             screen.fill(BLACK)
             self.ground.draw(screen)
             all_sprites.draw(screen)
-            if self.ultimate.alive():
-                waterpower.draw(screen)
 
             # 倒數畫面
             if self.show_ready:
@@ -416,12 +409,17 @@ class Game:
                         self.shooting_time = self.time
                         self.player.shoot()
             
-                if self.score >= 50 and not self.is_boss:
+                if self.score >= 10000 and not self.is_boss:
                     self.is_boss = True
                     all_sprites.add(self.boss)
                     self.boss_time = self.time
                 if self.is_boss:
-                    if self.time - self.boss_time > 500 and self.boss.hp > 0:
+                    self.boss_collision(bullets, 100, "sfx/smb_bump.wav", 'sm')
+                    hits = pygame.sprite.spritecollide(self.boss, rocks, True) # False表示buildings不刪除
+                    for hit in hits:
+                        play_sound("sfx/smb_bump.wav")
+                        new_rock()
+                    if self.time - self.boss_time > 100 and self.boss.hp > 0:
                         self.boss_time = self.time
                         self.boss.attack() 
                 
@@ -442,16 +440,24 @@ class Game:
             self.player_collision(rocks, 34, "sfx/smb_bump.wav", 'sm') 
             self.player_collision(fires, 17, "sfx/smb_bump.wav", 'sm') # 判斷火與主角相撞
             self.player_collision(buildings, 17, "sfx/smb_bump.wav", 'sm') # 判斷建築物與主角相撞
+            self.player_collision(fireballs, 17, "sfx/smb_bump.wav", 'sm') # 判斷火球與主角相撞
             
             self.other_collision(self.ultimate, rocks, "sfx/smb_breakblock.wav")
             self.other_collision(self.ultimate, fires, "sfx/smb_bowserfire.wav")
             self.other_collision(self.ultimate, buildings, "sfx/smb_breakblock.wav")
+            self.other_collision(self.ultimate, fireballs, "sfx/smb_bowserfire.wav")
             
             self.other_collision(bullets, rocks, "sfx/smb_breakblock.wav")
             self.other_collision(bullets, fires, "sfx/smb_bowserfire.wav")
+            self.other_collision(bullets, fireballs, "sfx/smb_bowserfire.wav")
             
             # 判斷子彈被建築擋住
             hits = pygame.sprite.groupcollide(bullets, buildings, True, False) # False表示buildings不刪除
+            for hit in hits:
+                play_sound("sfx/smb_bump.wav")
+            
+            # 判斷火球被建築擋住
+            hits = pygame.sprite.groupcollide(fireballs, buildings, True, False)
             for hit in hits:
                 play_sound("sfx/smb_bump.wav")
 
@@ -482,6 +488,10 @@ class Game:
             if (self.player.health <= 0) and not (self.death_expl.alive()) : # or self.score>=1000
                 self.close = True
                 self.show_ready = True
+            elif self.boss.hp <= 0 and not (self.death_expl2.alive()):
+                self.close = True
+                self.show_ready = True
+                self.win = True
 
             # 防護罩
             # self.player.protected = self.protect.activated
@@ -498,6 +508,8 @@ class Game:
                     self.kill_all = False
             
             self.draw_health(screen, self.player.health, 50, 20)
+            if self.is_boss:
+                self.draw_health(screen, self.boss.hp, 1000, 150)
             self.draw_mana_time(screen, self.mana.total_time, self.mana.max_time, 50, 50)
             self.draw_text(screen, BLACK, self.time_text(), 40, WIDTH / 2 - 10, 15)
             self.draw_text(screen, BLACK, str(self.score).zfill(6), 40, WIDTH - 150, 15) # 分數轉文字再補齊6位數
@@ -506,7 +518,7 @@ class Game:
             if self.pause:
                 pygame.event.set_grab(False)
                 pygame.mouse.set_visible(True)
-                self.draw_pause(screen, self.rand_num)
+                self.draw_pause(screen)
             else:
                 x, y = pygame.mouse.get_pos()
                 x = max(0, min(x, WIDTH))
@@ -519,7 +531,10 @@ class Game:
             if self.close:
                 pygame.event.set_grab(False)
                 pygame.mouse.set_visible(True)
-                self.draw_close(screen, self.rand_num2)
+                if self.win:
+                    self.draw_close(screen, self.rand_num3)
+                else:
+                    self.draw_close(screen)
 
             pygame.display.update()
 

@@ -12,6 +12,7 @@ class Fireball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = fireball_imgs[0]
         self.rect = self.image.get_rect(center=(x, y))
+        self.radius = int(self.rect.width * 0.85 / 2)
         self.origin = Vector2(x, y)
         self.speed = FIREATK_SPEED
         self.calculate_speed()

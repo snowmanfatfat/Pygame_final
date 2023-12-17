@@ -16,7 +16,8 @@ ORANGE = (242, 133, 0)
 RED1 = (255, 87, 87)
 BLUE = (0, 0, 128)
 LIGHT_BLUE = (173, 216, 230)
-DARK_GRAY = (50, 50, 50)
+DARK_GRAY = (50, 50, 50, 10)
+LIGHT_GRAY = (200, 200, 200)
 
 import os
 import pygame

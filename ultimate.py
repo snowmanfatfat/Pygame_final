@@ -6,14 +6,14 @@ from setting import *
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-ult_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "ult.png")).convert(), (1200, 100))
-waterpower_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "waterpower.png")).convert(), (100, 100))
+ult_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "ult.png")).convert(), (1000, 600))
+# waterpower_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "waterpower.png")).convert(), (100, 100))
 
 class Ultimate(pygame.sprite.Sprite):
     def __init__(self, x=WIDTH, y=HEIGHT):
         pygame.sprite.Sprite.__init__(self)
         self.img_ori = ult_img
-        self.img_ori.set_colorkey(WHITE)
+        self.img_ori.set_colorkey(BLACK)
         self.image = self.img_ori.copy()
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -45,20 +45,10 @@ class Ultimate(pygame.sprite.Sprite):
 
         # get a rotated image
         self.image = pygame.transform.rotate(self.img_ori, self.angle)
+        self.image.set_colorkey(BLACK)
 
     def update(self):
         self.blitRotate()
         self.angle += 0.5
         if self.angle > 90:
             self.kill()
-            
-class WaterPower:
-    def __init__(self, x, y):
-        self.image = waterpower_img
-        self.image.set_colorkey(BLACK)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-    
-    def draw(self, surf):
-        surf.blit(self.image, self.rect)
