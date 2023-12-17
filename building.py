@@ -20,7 +20,7 @@ class Building(pygame.sprite.Sprite):
         self.radius = int(self.rect.width * 0.85 / 2)
         self.rect.x = random.randrange(WIDTH + 100, WIDTH + 800)
         self.rect.bottom = HEIGHT - 30
-        self.speed_build = SPEED
+        self.speed_build = 0
 
     def update(self):
         self.rect.move_ip(-self.speed_build, 0)

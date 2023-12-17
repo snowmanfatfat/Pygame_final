@@ -5,8 +5,9 @@ import os
 import math
 from setting import *
 
-bullet_big_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "PeaNormal_0.png")), (108, 64))
-waterball_big_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "PeaIce_0.png")), (108, 64))
+bullet_big_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "PeaIce_0.png")), (108, 64))
+water_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "watercolumn.png")), (108, 108))
+# waterball_big_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "PeaIce_0.png")), (108, 64))
 
 class Projectile(pygame.sprite.Sprite):
     def __init__(self, x, y, type):
@@ -15,13 +16,17 @@ class Projectile(pygame.sprite.Sprite):
         if type == 'bullet':
             self.image = bullet_big_img
             self.speed = BULLET_SPEED
-        elif type == 'waterball':
-            self.image = waterball_big_img
-            self.speed = WATERBALL_SPEED
+        elif type == 'water':
+            self.image = water_img
+            self.speed = BULLET_SPEED
+        # elif type == 'waterball':
+        #     self.image = waterball_big_img
+        #     self.speed = WATERBALL_SPEED
         else:
-            raise ValueError('type must be bullet or waterball')
+            raise ValueError('type must be bullet or water')
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
+        self.radius = int(self.rect.width * 0.85 / 2)
         self.rect.centerx = x
         self.rect.centery = y
         

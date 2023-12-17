@@ -18,7 +18,7 @@ class Fire(pygame.sprite.Sprite):
         self.radius = int(self.rect.width * 0.85 / 2)
         self.rect.x = random.randrange(WIDTH + 100, WIDTH + 800)
         self.rect.bottom = HEIGHT - 50
-        self.speed_fire = SPEED
+        self.speed_fire = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 200
 

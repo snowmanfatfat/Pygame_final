@@ -38,7 +38,6 @@ class Tutorial:
         
         run = True
         clock = pygame.time.Clock()
-        pygame.mixer.music.set_volume(0.1)
 
         while run:
             clock.tick(FPS)
@@ -62,5 +61,5 @@ class Tutorial:
                     elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                         self.page -= 1
                         self.page = max(self.page, 0)
-
+                        
             pygame.display.update()

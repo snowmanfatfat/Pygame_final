@@ -14,8 +14,10 @@ for name in ground_name:
 
 class Ground:
     def __init__(self):
+        self.ground_name = ground_name
+        self.ground_img = ground_img
         self.count = 0
-        self.imgs = ground_img[ground_name[self.count]]
+        self.imgs = ground_img[ground_name[0]]
         self.imgs_rect = []
         self.ground_speed = SPEED
         
@@ -37,5 +39,5 @@ class Ground:
 
     def change_ground(self):
         self.count += 1
-        self.imgs = ground_img[ground_name[self.count % len(ground_name)]]
+        self.imgs = self.ground_img[self.ground_name[self.count % len(self.ground_name)]]
         

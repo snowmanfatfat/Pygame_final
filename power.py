@@ -7,13 +7,14 @@ from setting import *
 
 powers = pygame.sprite.Group()
 power_imgs = {}
-power_imgs['blood'] = pygame.image.load(os.path.join("img/power", "blood_old.png"))
-power_imgs['gun'] = pygame.image.load(os.path.join("img/power", "gun.png"))
+power_imgs['blood'] = pygame.transform.scale(pygame.image.load(os.path.join("img/power", "heart.png")), (100,100))
+power_imgs['gun'] = pygame.transform.scale(pygame.image.load(os.path.join("img/power", "doublewater.png")), (100,100))
+power_imgs['mana'] = pygame.transform.scale(pygame.image.load(os.path.join("img/power", "mana.png")), (100,100))
 
 class Power(pygame.sprite.Sprite):
     def __init__(self, center):
         pygame.sprite.Sprite.__init__(self)
-        self.type = random.choice(['blood', 'gun'])
+        self.type = random.choice(['blood', 'gun', 'mana'])
         self.image = power_imgs[self.type]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
