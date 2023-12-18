@@ -31,7 +31,7 @@ class Rock(pygame.sprite.Sprite):
         self.radius = int(self.rect.width * 0.85 / 2)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
         self.rect.y = random.randrange(-180, -100)
-        self.speedy = random.randrange(2, 5)
+        self.speedy = random.randrange(1, 5)
         self.speedx = random.randrange(-3, 3)
         self.total_degree = 0
         self.rot_degree = random.randrange(-3, 3)
@@ -53,7 +53,7 @@ class Rock(pygame.sprite.Sprite):
         if self.rect.top > HEIGHT  or self.rect.left > WIDTH or self.rect.right < 0 or self.rect.bottom < 0:
             self.rect.x = random.randrange(0, WIDTH - self.rect.width)
             self.rect.y = random.randrange(-100, -40)
-            self.speedy = random.randrange(2, 10)
+            self.speedy = random.randrange(1, 5)
             self.speedx = random.randrange(-3, 3)
 
 #生成新的石頭

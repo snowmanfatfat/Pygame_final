@@ -47,7 +47,6 @@ class Tutorial:
             elif self.page == 2:
                 self.draw2(self.menu_win)
 
-            # x, y = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False

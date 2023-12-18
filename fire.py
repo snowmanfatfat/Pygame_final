@@ -8,7 +8,7 @@ from setting import *
 # screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 fire_path = get_path("img/fire")
-fire_img = [pygame.transform.scale(pygame.image.load(path),(250,250)) for path in fire_path['fire']]
+fire_img = [pygame.transform.scale(pygame.image.load(path),(180,180)) for path in fire_path['fire']]
 fires = pygame.sprite.Group()
 
 class Fire(pygame.sprite.Sprite):

@@ -10,7 +10,6 @@ pygame.init()
 pygame.mixer.init()
 
 start_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"start.png")), (285, 100))
-# end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"end.png")), (285, 100))
 setting_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"setting.png")), (70, 70))
 
 title_path = get_path("img/start_menu/title1")
@@ -36,9 +35,9 @@ class StartMenu:
         self.volume = 0.4
 
     def play_music(self):
-        pygame.mixer.music.load("audio/meowSSion.mp3")
+        pygame.mixer.music.load("audio/bgm.mp3")
         pygame.mixer.music.set_volume(self.volume)
-        pygame.mixer.music.play(-1, 0)
+        pygame.mixer.music.play(-1, 0.1) # -1: loop forever, 0: start from beginning
     
     def draw(self, surf):
         surf.blit(self.title_img, (0, 0))
@@ -70,18 +69,13 @@ class StartMenu:
                     run = False
                     
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    print(x, y)
                     if self.setting_btn.is_clicked(x, y):
                         self.setting_menu.setting_show(self.menu_win)
-                    
-                    # if self.end_btn.is_clicked(x, y):
-                    #     run = False
 
                     if self.start_btn.is_clicked(x, y):
                         ttl = Tutorial()
                         ttl.ttl_run()
                         run = False
-                       
 
             pygame.display.update()
         pygame.quit()

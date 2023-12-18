@@ -9,7 +9,7 @@ from building import all_sprites
 # screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 player_path = get_path("img/player/new")
-player_img = [pygame.transform.scale(pygame.image.load(path), (250, 300)) for path in player_path['new']]
+player_img = [pygame.transform.scale(pygame.image.load(path), (200, 250)) for path in player_path['new']]
 bullets = pygame.sprite.Group()
 
 class Player(pygame.sprite.Sprite):
@@ -26,7 +26,8 @@ class Player(pygame.sprite.Sprite):
 
         self.speedx = 8
         self.vel_y = 0 # 模擬重力
-        self.health = 100
+        self.hp = 100
+        self.max_hp = 100
         self.gun = 1 # 單發或雙發
         self.gun_time = 0
 
@@ -39,11 +40,6 @@ class Player(pygame.sprite.Sprite):
         self.k_range = 100
         self.k_range_max = 1000
 
-    def draw_protect(self, surf):
-        surface = pygame.Surface((self.p_range * 2, self.p_range * 2), pygame.SRCALPHA)
-        pygame.draw.circle(surface, (70, 70, 255, self.p_trans), (self.p_range, self.p_range), self.p_range)
-        surf.blit(surface, (self.rect.x - self.p_range // 2, self.rect.y - self.p_range // 2))
-
     def draw_kill_all(self, surf):
         surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
         pygame.draw.circle(surface, (255, 255, 255, 140), (WIDTH // 2, HEIGHT // 2), self.k_range)
@@ -55,7 +51,6 @@ class Player(pygame.sprite.Sprite):
     
     # 射子彈
     def shoot(self):
-        # play_sound("sfx\smb_fireball.wav")
         play_sound("sfx\smw_swimming.wav")
         if self.gun == 1:
             bullet = Projectile(self.rect.centerx, self.rect.centery, 'bullet')
@@ -66,18 +61,6 @@ class Player(pygame.sprite.Sprite):
             all_sprites.add(bullet)
             bullets.add(bullet)
 
-    # # 射水球
-    # def shootwater(self):
-    #     play_sound("sfx\smw_swimming.wav")
-    #     waterball = Projectile(self.rect.left, self.rect.centery, 'waterball')
-    #     all_sprites.add(waterball)
-    #     waterballs.add(waterball)
-
-    # def ultimate(self):
-    #     ultimate = Ultimate(self.rect.centerx, self.rect.centery)
-    #     all_sprites.add(ultimate)
-    #     ultimates.add(ultimate)
-
     # 武器升級成連發
     def gunup(self):
         self.gun = 2
@@ -85,7 +68,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         # pygame.draw.circle(screen, RED, self.rect.center, self.radius, 1)
         self.image.set_colorkey(WHITE)
-        if self.health > 0:
+        if self.hp > 0:
             now = pygame.time.get_ticks()
             # 回到原地
             if self.rect.bottom == (HEIGHT - 30):

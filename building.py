@@ -11,7 +11,7 @@ all_sprites = pygame.sprite.Group()
 buildings = pygame.sprite.Group()
 
 building_path = get_path("img/building")
-building_anim = [pygame.transform.scale(pygame.image.load(path), (400, 350)) for path in building_path['building']]
+building_anim = [pygame.transform.scale(pygame.image.load(path), (330, 270)) for path in building_path['building']]
 class Building(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -19,7 +19,7 @@ class Building(pygame.sprite.Sprite):
         self.anim = building_anim
         self.image = building_anim[0]
         self.rect = self.image.get_rect()
-        self.radius = int(self.rect.width * 0.7 / 2)
+        self.radius = int(self.rect.width * 0.3 / 2)
         self.rect.x = random.randrange(WIDTH + 100, WIDTH + 800)
         self.rect.bottom = HEIGHT - 30
         self.speed_build = 0

@@ -8,17 +8,23 @@ fireball_imgs = [pygame.transform.scale(pygame.image.load(path), (100, 100)) for
 fireballs = pygame.sprite.Group()
 
 class Fireball(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, type):
         pygame.sprite.Sprite.__init__(self)
-        self.image = fireball_imgs[0]
-        self.rect = self.image.get_rect(center=(x, y))
+        self.imgs = fireball_imgs
+        if type == 'fire':
+            self.image = fireball_imgs[0]
+            self.rect = self.image.get_rect(center=(x+100, y+50))
+            self.origin = Vector2(x, y)
+        else:
+            self.image = fireball_imgs[1]
+            self.rect = self.image.get_rect(center=(x-300, y))
+            self.origin = Vector2(x-200, y)
         self.radius = int(self.rect.width * 0.85 / 2)
-        self.origin = Vector2(x, y)
         self.speed = FIREATK_SPEED
         self.calculate_speed()
         
     def calculate_speed(self):
-        target = Vector2(random.randrange(-200, -100), random.randrange(100, HEIGHT - 50))
+        target = Vector2(random.randrange(-200, -100), random.randrange(0, HEIGHT))
         direction = (target - self.origin).normalize()
         self.velocity = direction * self.speed
     

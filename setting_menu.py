@@ -4,22 +4,22 @@ from setting import *
 from buttons import Buttons
 
 sound_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"sound.png")), (60, 60))
-mute_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"mute.png")), (60, 60))
-end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"end.png")), (285, 100))
+mute_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"mute.png")), (50, 60))
+end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"end.png")), (250, 120))
 bg_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"bg.png")), (WIDTH, HEIGHT))
 
 class SettingMenu:
     def __init__(self):
-        self.font_name = os.path.join("ttf","HanyiSentyPagoda.ttf")
+        self.font_name = os.path.join("ttf","jf-openhuninn-2.0.ttf")
         self.sound_img = sound_img
         self.mute_img = mute_img
         self.bg_img = bg_img
         self.circle_start = 0.4 * (360-90) + 90
         self.volume = 0.4
         self.volume_state = False
-        self.sound_btn = Buttons(sound_img, 20, 120)
-        self.mute_btn = Buttons(mute_img, 20, 120)
-        self.end_btn = Buttons(end_img, 82, 200)
+        self.sound_btn = Buttons(sound_img, 0, 120)
+        self.mute_btn = Buttons(mute_img, 0, 120)
+        self.end_btn = Buttons(end_img, 100, 230)
         self.is_mute = False
         self.x = 490
         self.y = 220
@@ -30,22 +30,23 @@ class SettingMenu:
         return False
     
     def draw(self, surf):
-        surface = pygame.Surface((450,350), pygame.SRCALPHA)
-        font = pygame.font.Font(self.font_name, 60)
-        text_surface = font.render("Setting", True, BLACK)
+        surface = pygame.Surface((550,350), pygame.SRCALPHA)
+        font = pygame.font.Font(self.font_name, 80)
+        text_surface = font.render("Setting", True, WHITE)
         text_rect = text_surface.get_rect()
         text_rect.centerx = 225
-        text_rect.top = 30
+        text_rect.top = 0
         surface.blit(text_surface, text_rect)
         
-        text_surface2 = font.render(f'{self.volume*100:.0f}', True, BLACK)
+        font2 = pygame.font.Font(self.font_name, 50)
+        text_surface2 = font2.render(f'{self.volume*100:.0f}', True, WHITE)
         text_rect = text_surface.get_rect()
-        text_rect.x = 370
-        text_rect.centery = 150
+        text_rect.x = 390
+        text_rect.centery = 170
         surface.blit(text_surface2, text_rect)
         
-        pygame.draw.line(surface, RED, (90,150), (360,150), 5)
-        self.circle = pygame.draw.circle(surface, WHITE, (self.circle_start,150), 10)
+        pygame.draw.line(surface, RED, (90,150), (360,150), 10)
+        self.circle = pygame.draw.circle(surface, ORANGE, (self.circle_start,150), 20)
         
         if self.is_mute or self.volume == 0:
             surface.blit(self.mute_btn.img, self.mute_btn.rect)

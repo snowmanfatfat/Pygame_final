@@ -7,7 +7,6 @@ pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 ult_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "ult.png")).convert(), (1000, 600))
-# waterpower_img = pygame.transform.scale(pygame.image.load(os.path.join("img/bullet", "waterpower.png")).convert(), (100, 100))
 
 class Ultimate(pygame.sprite.Sprite):
     def __init__(self, x=WIDTH, y=HEIGHT):
