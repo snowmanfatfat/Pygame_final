@@ -30,7 +30,7 @@ class Explosion(pygame.sprite.Sprite):
         self.rect.center = center
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
-        self.frame_rate2 = 100
+        self.frame_rate2 = 200
 
     def update(self):
         now = pygame.time.get_ticks()

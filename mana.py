@@ -3,7 +3,7 @@ from setting import *
 class Mana:
     def __init__(self):
         self.max_time = 60 * FPS # 過了60秒，也就是3600幀
-        self.total_time = 60 * FPS
+        self.total_time = 30 * FPS
 
     def is_ready(self) -> bool:
         if self.total_time >= self.max_time:

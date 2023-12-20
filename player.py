@@ -34,24 +34,24 @@ class Player(pygame.sprite.Sprite):
         self.jump_counter = 0
         self.jumped = False
 
-        self.p_range = 150
-        self.p_trans = 90
+        # self.p_range = 150
+        # self.p_trans = 90
 
-        self.k_range = 100
-        self.k_range_max = 1000
+        # self.k_range = 100
+        # self.k_range_max = 1000
 
-    def draw_kill_all(self, surf):
-        surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        pygame.draw.circle(surface, (255, 255, 255, 140), (WIDTH // 2, HEIGHT // 2), self.k_range)
-        surf.blit(surface, (0, 0))
-        if self.k_range < self.k_range_max:
-            self.k_range += 60
-        else:
-            self.k_range = 100
+    # def draw_kill_all(self, surf):
+    #     surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    #     pygame.draw.circle(surface, (255, 255, 255, 140), (WIDTH // 2, HEIGHT // 2), self.k_range)
+    #     surf.blit(surface, (0, 0))
+    #     if self.k_range < self.k_range_max:
+    #         self.k_range += 60
+    #     else:
+    #         self.k_range = 100
     
     # 射子彈
     def shoot(self):
-        play_sound("sfx\smw_swimming.wav")
+        play_sound("sfx/smw_swimming.wav", 0.8)
         if self.gun == 1:
             bullet = Projectile(self.rect.centerx, self.rect.centery, 'bullet')
             all_sprites.add(bullet)
@@ -70,6 +70,7 @@ class Player(pygame.sprite.Sprite):
         self.image.set_colorkey(WHITE)
         if self.hp > 0:
             now = pygame.time.get_ticks()
+            
             # 回到原地
             if self.rect.bottom == (HEIGHT - 30):
                 self.jump_counter = 0
@@ -79,7 +80,7 @@ class Player(pygame.sprite.Sprite):
             if key_pressed[pygame.K_w] or key_pressed[pygame.K_SPACE]:
                 if (not self.jumped) and self.rect.bottom <= (HEIGHT - 30):
                     if self.jump_counter < 2:
-                        play_sound("sfx\smb_jump-small.wav")
+                        play_sound("sfx/smb_jump-small.wav")
                         self.vel_y = -22
                         self.jump_counter += 1
                     self.jumped = True

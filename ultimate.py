@@ -48,6 +48,6 @@ class Ultimate(pygame.sprite.Sprite):
 
     def update(self):
         self.blitRotate()
-        self.angle += 0.5
+        self.angle += 1
         if self.angle > 90:
             self.kill()

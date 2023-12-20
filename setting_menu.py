@@ -15,7 +15,7 @@ class SettingMenu:
         self.mute_img = mute_img
         self.bg_img = bg_img
         self.circle_start = 0.4 * (360-90) + 90
-        self.volume = 0.4
+        self.volume = 0.3
         self.volume_state = False
         self.sound_btn = Buttons(sound_img, 0, 120)
         self.mute_btn = Buttons(mute_img, 0, 120)
@@ -23,6 +23,7 @@ class SettingMenu:
         self.is_mute = False
         self.x = 490
         self.y = 220
+        self.last_pause = 0
         
     def is_clicked(self, x, y):
         if self.circle.collidepoint(x, y):

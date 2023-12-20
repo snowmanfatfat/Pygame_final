@@ -32,7 +32,7 @@ class StartMenu:
         self.start_btn = Buttons(start_img, 867, 208)
         # self.end_btn = Buttons(end_img, WIDTH // 2 - 142.5, 650)
         self.setting_btn = Buttons(setting_img, WIDTH - 95, 50)
-        self.volume = 0.4
+        self.volume = 0.3
         self.stop = False
 
     def play_music(self):
