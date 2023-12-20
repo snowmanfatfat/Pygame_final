@@ -6,7 +6,7 @@ from pygame.math import Vector2
 fireball_path = get_path("img/boss/attack")
 fireball_imgs = [pygame.transform.scale(pygame.image.load(path), (100, 100)) for path in fireball_path['attack']]
 fireballs = pygame.sprite.Group()
-
+fireballs2 = pygame.sprite.Group()
 class Fireball(pygame.sprite.Sprite):
     def __init__(self, x, y, type):
         pygame.sprite.Sprite.__init__(self)

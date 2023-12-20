@@ -1,6 +1,6 @@
 from setting import *
 import pygame
-from fireball import Fireball, fireballs
+from fireball import Fireball, fireballs, fireballs2
 from building import all_sprites
 
 # screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -41,7 +41,7 @@ class Boss(pygame.sprite.Sprite):
             all_sprites.add(fireball)
             all_sprites.add(fireball2)
             fireballs.add(fireball)
-            fireballs.add(fireball2)
+            fireballs2.add(fireball2)
         
     def update(self):
         now = pygame.time.get_ticks()

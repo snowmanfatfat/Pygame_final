@@ -13,13 +13,13 @@ expl_anim = {'lg': [], 'sm': [], 'player': []}
 for path in expl_path['expl']:
     image = pygame.image.load(path)
     image.set_colorkey(WHITE)
-    expl_anim['lg'].append(pygame.transform.scale(image, (200, 200)))
+    expl_anim['lg'].append(pygame.transform.scale(image, (300, 300)))
     expl_anim['sm'].append(pygame.transform.scale(image, (150, 150)))
     
 for path in expl_path['player']:
     image = pygame.image.load(path)
     image.set_colorkey(WHITE)
-    expl_anim['player'].append(pygame.transform.scale(image, (200, 200)))
+    expl_anim['player'].append(pygame.transform.scale(image, (300, 300)))
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, center, size):
         pygame.sprite.Sprite.__init__(self)

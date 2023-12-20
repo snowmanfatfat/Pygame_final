@@ -77,7 +77,6 @@ class SettingMenu:
                         self.volume_state = True
                     if self.end_btn.is_clicked(x, y):
                         run = False
-                        return not run
                     if self.sound_btn.is_clicked(x, y):
                         self.is_mute = not self.is_mute
 
@@ -86,12 +85,10 @@ class SettingMenu:
                     
                 if event.type == pygame.QUIT:
                     run = False
-                    return not run
             
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
                         run = False
-                        return not run
         
             if self.volume_state:                   
                 self.circle_start = x
@@ -100,6 +97,6 @@ class SettingMenu:
                 elif self.circle_start > 360:
                     self.circle_start = 360
                 self.volume = (self.circle_start - 90) / (360 - 90)
-            
+                
             pygame.display.update()
             

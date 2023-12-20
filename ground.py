@@ -36,7 +36,7 @@ class Ground:
         for i in range(len(self.imgs_rect)):
             self.imgs_rect[i].left -= (self.ground_speed)
             if self.imgs_rect[i].right <= 0:
-                self.imgs_rect[i].left = WIDTH * (len(self.imgs_rect) - 1)
+                self.imgs_rect[i].left = WIDTH * (len(self.imgs_rect) - 1)-self.ground_speed*3
 
     def draw(self, screen):
         for i in range(len(self.imgs_rect)):
