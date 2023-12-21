@@ -7,7 +7,6 @@ sound_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_men
 mute_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"mute.png")), (50, 60))
 end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"end.png")), (250, 120))
 bg_img = pygame.transform.scale(pygame.image.load(os.path.join("img/start_menu", f"bg.png")), (WIDTH, HEIGHT))
-
 class SettingMenu:
     def __init__(self):
         self.font_name = os.path.join("ttf","jf-openhuninn-2.0.ttf")
@@ -23,7 +22,6 @@ class SettingMenu:
         self.is_mute = False
         self.x = 490
         self.y = 220
-        self.last_pause = 0
         
     def is_clicked(self, x, y):
         if self.circle.collidepoint(x, y):
@@ -100,4 +98,5 @@ class SettingMenu:
                 self.volume = (self.circle_start - 90) / (360 - 90)
                 
             pygame.display.update()
-            
+
+settingmenu = SettingMenu()

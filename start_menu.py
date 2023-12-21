@@ -1,7 +1,7 @@
 import pygame
 import os
 import time
-from setting_menu import SettingMenu
+from setting_menu import settingmenu
 from setting import *
 from tutorial import Tutorial
 from buttons import Buttons
@@ -25,19 +25,18 @@ class StartMenu:
         self.animation_index = 0
         self.title_img = title_anim[0]
         # self.setting_bg = setting_bg
-        self.setting_menu = SettingMenu()
+        self.setting_menu = settingmenu
         
         self.last_update = time.time()
         self.frame_rate = 0.1 # 每0.1秒換一張圖
         self.start_btn = Buttons(start_img, 867, 208)
         # self.end_btn = Buttons(end_img, WIDTH // 2 - 142.5, 650)
         self.setting_btn = Buttons(setting_img, WIDTH - 95, 50)
-        self.volume = 0.3
         self.stop = False
 
     def play_music(self):
         pygame.mixer.music.load("audio/bgm.mp3")
-        pygame.mixer.music.set_volume(self.volume)
+        pygame.mixer.music.set_volume(self.setting_menu.volume)
         pygame.mixer.music.play(-1, 0.1) # -1: loop forever, 0: start from beginning
     
     def draw(self, surf):
@@ -77,6 +76,13 @@ class StartMenu:
                         ttl = Tutorial()
                         ttl.ttl_run()
                         run = False
+                
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        run = False
+                    
+                    if event.key == pygame.K_p:
+                        self.setting_menu.setting_show(self.menu_win)
 
             pygame.display.update()
         pygame.quit()

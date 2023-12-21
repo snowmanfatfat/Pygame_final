@@ -16,6 +16,7 @@ from player import Player, bullets
 from mana import Mana
 from ultimate import Ultimate
 from boss import Boss, fireballs, fireballs2
+from setting_menu import settingmenu
 
 end_img = pygame.transform.scale(pygame.image.load(os.path.join("img/end", f"end.png")),(285, 100))
 again_img = pygame.transform.scale(pygame.image.load(os.path.join("img/end", f"again.png")),(285, 100))
@@ -65,7 +66,9 @@ class Game:
         self.is_death_expl2 = False
         self.is_death_expl = False
         self.is_ultimate = False
-        self.boss_bgm = False
+        
+        # self.setting_menu = settingmenu
+        # self.last_pause = 0
         
     # 顯示文字(時間和分數)
     def draw_text(self, surf, color , text, size, x, y):
@@ -267,15 +270,7 @@ class Game:
         while self.running:
             clock.tick(FPS)
             
-            if self.pause:
-                pygame.event.set_grab(False)
-                pygame.mouse.set_visible(True)
-                self.draw_pause(screen) 
-            
-            while self.close:
-                pygame.event.set_grab(False)
-                pygame.mouse.set_visible(True)
-                
+            while self.close: 
                 self.rand_num3 = random.randrange(len(self.wins_list))
                 x, y = pygame.mouse.get_pos()
 
@@ -330,6 +325,7 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
                     
+                    now = pygame.time.get_ticks()
                     if event.key == pygame.K_p:
                         self.pause = not self.pause
                         play_sound("sfx/smb_pause.wav")
@@ -339,6 +335,11 @@ class Game:
                         else:
                             pygame.mixer.music.unpause()
                             self.stop_time_count += pygame.time.get_ticks() - stop_time # 因為一開始都會停4秒，所以把4秒保留在裡面
+                    
+                    if event.key == pygame.K_r:
+                        self.close = True
+                        play_sound("sfx/dead1.wav")
+                        pygame.mixer.music.stop()
 
                     # '''通殺test'''
                     # if event.key == pygame.K_LCTRL:
@@ -359,11 +360,6 @@ class Game:
                     #         for fb2 in fireballs2.sprites():
                     #             fb2.kill()
                     #             self.score += 10
-                            
-                    if event.key == pygame.K_r:
-                        self.close = True
-                        play_sound("sfx/dead1.wav")
-                        pygame.mixer.music.stop()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not self.pause:
@@ -395,7 +391,7 @@ class Game:
             #         self.stop_time_count = 4 * 1000
             
             # 更新遊戲
-            if self.running and not self.pause:
+            if not self.pause:
                 screen.fill(BLACK)
                 self.ground.draw(screen)
                 all_sprites.draw(screen)
@@ -551,8 +547,17 @@ class Game:
                 #     self.player.draw_kill_all(screen)
                 #     if self.player.k_range == 100:
                 #         self.kill_all = False    
-
+            
+            if self.pause:
+                pygame.event.set_grab(False)
+                pygame.mouse.set_visible(True)
+                self.draw_pause(screen)
+                # self.setting_menu.setting_show(screen)
+                # self.pause = False
+            
             if self.close:
+                pygame.event.set_grab(False)
+                pygame.mouse.set_visible(True)
                 if self.win:
                     self.draw_close(screen, self.rand_num3)
                 else:
