@@ -6,16 +6,10 @@ pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 ground_path = get_path("img/ground")
-ground_name = list(ground_path.keys())
-
-size = [(WIDTH, HEIGHT), (WIDTH, HEIGHT)]
-ground_img = {'1_': [], '2_': []}
-for i, path in enumerate(ground_path['1_']):
-    img = pygame.image.load(path).convert()
-    ground_img['1_'].append(pygame.transform.scale(img, size[i]))
-for path in ground_path['2_']:
-    img = pygame.image.load(path).convert()
-    ground_img['2_'].append(pygame.transform.scale(img, size[0]))
+ground_name = ['1', '2', '3', 'boss']
+ground_img = {}
+for name in ground_name:
+    ground_img[name] = [pygame.transform.scale(pygame.image.load(path).convert(), (WIDTH, HEIGHT)) for path in ground_path[name]]
 
 class Ground:
     def __init__(self):
@@ -42,7 +36,10 @@ class Ground:
         for i in range(len(self.imgs_rect)):
             screen.blit(self.imgs[i], self.imgs_rect[i])
 
-    def change_ground(self):
-        self.count += 1
-        self.imgs = self.ground_img[self.ground_name[self.count % len(self.ground_name)]]
+    def change_ground(self, boss=False):
+        if boss:
+            self.imgs = self.ground_img['boss']
+        else:
+            self.count += 1
+            self.imgs = self.ground_img[self.ground_name[self.count % (len(self.ground_name)-1)]]
         

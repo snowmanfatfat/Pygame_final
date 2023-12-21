@@ -398,8 +398,8 @@ class Game:
                 
                 self.draw_health(screen, self.player.hp, 50, 20, 'player')
                 self.draw_mana_time(screen, self.mana.total_time, self.mana.max_time, 50, 50)
-                self.draw_text(screen, BLACK, self.time_text(), 40, WIDTH / 2 - 10, 15)
-                self.draw_text(screen, BLACK, str(int(self.score)).zfill(6), 40, WIDTH - 150, 15) # 分數轉文字再補齊6位數
+                self.draw_text(screen, WHITE, self.time_text(), 40, WIDTH / 2 - 10, 15)
+                self.draw_text(screen, WHITE, str(int(self.score)).zfill(6), 40, WIDTH - 150, 15) # 分數轉文字再補齊6位數
                 
                 x, y = pygame.mouse.get_pos()
                 x = max(0, min(x, WIDTH))
@@ -423,12 +423,13 @@ class Game:
                         self.player.shoot()
             
                 if self.score >= 1000 and not self.is_boss:
+                    pygame.mixer.music.pause()
+                    play_sound("sfx/boss_bgm.wav",0.4,-1)
+                    self.ground.change_ground(True)
                     self.is_boss = True
                     self.boss = Boss()
                     all_sprites.add(self.boss)
                     self.boss_time = self.time
-                    pygame.mixer.music.pause()
-                    play_sound("sfx/boss_bgm.wav",0.4,-1)
                     
                 if self.is_boss:
                     if self.boss.is_second and self.boss.hp <= 0:
@@ -451,7 +452,7 @@ class Game:
                         self.boss.attack()
                           
                 # 更換背景
-                if (self.time//1000 % 10 == 0 and self.time//1000 != 0)  and self.change:
+                if (self.time//1000 % 5 == 0 and self.time//1000 != 0)  and self.change and not self.is_boss:
                     self.ground.change_ground()
                     self.last_change = time.time()
                     self.change = False
