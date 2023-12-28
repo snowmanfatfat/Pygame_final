@@ -8,7 +8,7 @@ from player import player_img
 from game import Game
 
 ttl_path = get_path("img/tutorial")
-ttl_name = ['a', 'b', 'tutorial']
+ttl_name = ['a', 'b', 'c', 'tutorial']
 ttl_ani = {}
 for name in ttl_name:
     ttl_ani[name] = [pygame.transform.scale(pygame.image.load(path), (WIDTH, HEIGHT)) for path in ttl_path[name]]
@@ -41,7 +41,7 @@ class Tutorial:
         self.last_update3 = time.time()
         self.last_update4 = time.time()
         
-        self.bgframe_rate = 0.8
+        self.bgframe_rate = 1
         self.frame_rate = 0.1
 
     def draw_ttl(self, surf, page):
@@ -57,7 +57,7 @@ class Tutorial:
             self.ttl_img = self.ttl_ani[self.ttl_name[page]][self.ttl_count % len(self.ttl_ani[self.ttl_name[page]])]
 
     def update_fire(self, surf):
-        surf.blit(self.fire_img, (500, 260))
+        surf.blit(self.fire_img, (450, 520))
         now = time.time()
         if now - self.last_update > self.frame_rate:
             self.last_update = now
@@ -65,7 +65,7 @@ class Tutorial:
             self.fire_img = self.fire_ani[self.ani_idx % len(self.fire_ani)]
     
     def update_buliding(self, surf):
-        surf.blit(self.buliding_img, (1000, 340))
+        surf.blit(self.buliding_img, (900, 210))
         now = time.time()
         if now - self.last_update2 > self.frame_rate:
             self.last_update2 = now
@@ -73,7 +73,7 @@ class Tutorial:
             self.buliding_img = self.buliding_ani[self.ani_idx2 % len(self.buliding_ani)]
 
     def update_player(self, surf):
-        surf.blit(self.player_img, (260, 200))
+        surf.blit(self.player_img, (380, 280))
         now = time.time()
         if now - self.last_update3 > self.frame_rate:
             self.last_update3 = now
@@ -91,9 +91,9 @@ class Tutorial:
             self.update_bg(self.menu_win, self.page)
             self.draw_ttl(self.menu_win, self.page)
             
-            if self.page == 0:
+            if self.page == 1:
                 self.update_player(self.menu_win)
-            elif self.page == 1:
+            elif self.page == 0:
                 self.update_fire(self.menu_win)
                 self.update_buliding(self.menu_win)
             

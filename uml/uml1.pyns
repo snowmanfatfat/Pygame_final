@@ -1,0 +1,64 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'Boss', 'x':1087, 'y':198, 'width':87, 'height':264, 'attrs': 'animation|frame_rate|hp|hp2|idx|image|is_second|last_update|max_hp|orib|orix|radius|rect', 'meths': '__init__|attack|update'}
+{'type':'umlshape', 'id':'pygame.sprite.Sprite', 'x':831, 'y':483, 'width':170, 'height':26, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Building', 'x':516, 'y':95, 'width':87, 'height':186, 'attrs': 'anim|frame|frame_rate|image|last_update|radius|rect|speed_build', 'meths': '__init__|update'}
+{'type':'umlshape', 'id':'random.randrange', 'x':640, 'y':10, 'width':138, 'height':26, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Buttons', 'x':268, 'y':21, 'width':80, 'height':108, 'attrs': 'img|rect', 'meths': '__init__|is_clicked'}
+{'type':'umlshape', 'id':'Explosion', 'x':688, 'y':453, 'width':87, 'height':173, 'attrs': 'frame|frame_rate|frame_rate2|image|last_update|rect|size', 'meths': '__init__|update'}
+{'type':'umlshape', 'id':'Fire', 'x':663, 'y':83, 'width':87, 'height':186, 'attrs': 'anim|frame|frame_rate|image|last_update|radius|rect|speed_fire', 'meths': '__init__|update'}
+{'type':'umlshape', 'id':'Fireball', 'x':1217, 'y':426, 'width':115, 'height':186, 'attrs': 'image|imgs|origin|radius|rect|speed|velocity', 'meths': '__init__|calculate_speed|update'}
+{'type':'umlshape', 'id':'Vector2', 'x':1380, 'y':504, 'width':66, 'height':26, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Game', 'x':349, 'y':173, 'width':122, 'height':706, 'attrs': 'again_btn|boss|boss_dead|boss_time|change|close|death_expl|death_expl2|end_btn|font_name|ground|gun_time|init_time|is_boss|is_death_expl|is_death_expl2|is_shooting|is_ultimate|last_change|last_score|lose_img|mana|mouse_img|pause|player|running|score|shooting_time|speedup|stop_time_count|time|ultimate|update_rate|win|win_img', 'meths': '__init__|boss_collision|calculate_score|draw_close|draw_health|draw_mana_time|draw_mouse|draw_pause|draw_text|game_run|get_new_entity|other_collision|player_collision|ready_time|time_text'}
+{'type':'umlshape', 'id':'time.time', 'x':149, 'y':511, 'width':82, 'height':26, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Ultimate', 'x':621, 'y':643, 'width':80, 'height':186, 'attrs': 'angle|image|img_ori|originPos|rect|rectx_ori|recty_ori', 'meths': '__init__|blitRotate|update'}
+{'type':'umlshape', 'id':'Ground', 'x':621, 'y':855, 'width':101, 'height':186, 'attrs': 'count|ground_img|ground_name|ground_speed|imgs|imgs_rect', 'meths': '__init__|change_ground|draw|update'}
+{'type':'umlshape', 'id':'Mana', 'x':513, 'y':886, 'width':80, 'height':121, 'attrs': 'max_time|total_time', 'meths': '__init__|is_ready|update'}
+{'type':'umlshape', 'id':'Player', 'x':874, 'y':582, 'width':94, 'height':277, 'attrs': 'gun|gun_time|hp|image|jump_counter|jumped|max_hp|num|radius|rect|speedx|time|vel_y', 'meths': '__init__|gunup|shoot|update'}
+{'type':'umlshape', 'id':'Power', 'x':969, 'y':193, 'width':66, 'height':134, 'attrs': 'image|rect|speed|type', 'meths': '__init__|update'}
+{'type':'umlshape', 'id':'random.choice', 'x':893, 'y':10, 'width':114, 'height':26, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Projectile', 'x':1040, 'y':606, 'width':101, 'height':199, 'attrs': 'angle_degrees|image|image_ori|radius|rect|speed|speedx|speedy', 'meths': '__init__|rotate|update'}
+{'type':'umlshape', 'id':'math.degrees', 'x':1183, 'y':690, 'width':106, 'height':26, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Rock', 'x':818, 'y':90, 'width':94, 'height':199, 'attrs': 'image|image_ori|radius|rect|rot_degree|speedx|speedy|total_degree', 'meths': '__init__|rotate|update'}
+{'type':'umlshape', 'id':'SettingMenu', 'x':190, 'y':177, 'width':98, 'height':290, 'attrs': 'bg_img|circle|circle_start|end_btn|font_name|is_mute|mute_btn|mute_img|sound_btn|sound_img|volume|volume_state|x|y', 'meths': '__init__|draw|is_clicked|setting_show'}
+{'type':'umlshape', 'id':'StartMenu', 'x':34, 'y':21, 'width':122, 'height':251, 'attrs': 'animation_index|frame_rate|last_update|menu_win|setting_btn|setting_menu|start_btn|stop|title_anim|title_img', 'meths': '__init__|draw|menu_run|play_music|update_animation'}
+{'type':'umlshape', 'id':'Tutorial', 'x':93, 'y':608, 'width':115, 'height':420, 'attrs': 'ani_idx|ani_idx2|ani_idx3|bgframe_rate|buliding_ani|buliding_img|fire_ani|fire_img|frame_rate|last_update|last_update2|last_update3|last_update4|menu_win|page|player_ani|player_img|ttl_ani|ttl_count|ttl_img|ttl_name', 'meths': '__init__|draw_ttl|ttl_run|update_bg|update_buliding|update_fire|update_player'}
+{'type':'edge', 'id':'Boss_to_pygame.sprite.Sprite', 'source':'Boss', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Building_to_pygame.sprite.Sprite', 'source':'Building', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'random.randrange_to_Building', 'source':'random.randrange', 'target':'Building', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Explosion_to_pygame.sprite.Sprite', 'source':'Explosion', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Fire_to_pygame.sprite.Sprite', 'source':'Fire', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'random.randrange_to_Fire', 'source':'random.randrange', 'target':'Fire', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Fireball_to_pygame.sprite.Sprite', 'source':'Fireball', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Vector2_to_Fireball', 'source':'Vector2', 'target':'Fireball', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'time.time_to_Game', 'source':'time.time', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Boss_to_Game', 'source':'Boss', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Ultimate_to_Game', 'source':'Ultimate', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Explosion_to_Game', 'source':'Explosion', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Buttons_to_Game', 'source':'Buttons', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Player_to_pygame.sprite.Sprite', 'source':'Player', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Power_to_pygame.sprite.Sprite', 'source':'Power', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'random.choice_to_Power', 'source':'random.choice', 'target':'Power', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Projectile_to_pygame.sprite.Sprite', 'source':'Projectile', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'math.degrees_to_Projectile', 'source':'math.degrees', 'target':'Projectile', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Rock_to_pygame.sprite.Sprite', 'source':'Rock', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'random.choice_to_Rock', 'source':'random.choice', 'target':'Rock', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'random.randrange_to_Rock', 'source':'random.randrange', 'target':'Rock', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Buttons_to_SettingMenu', 'source':'Buttons', 'target':'SettingMenu', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'time.time_to_StartMenu', 'source':'time.time', 'target':'StartMenu', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Buttons_to_StartMenu', 'source':'Buttons', 'target':'StartMenu', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'time.time_to_Tutorial', 'source':'time.time', 'target':'Tutorial', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Ultimate_to_pygame.sprite.Sprite', 'source':'Ultimate', 'target':'pygame.sprite.Sprite', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Tutorial_to_StartMenu', 'source':'Tutorial', 'target':'StartMenu', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Game_to_Tutorial', 'source':'Game', 'target':'Tutorial', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Fireball_to_Boss', 'source':'Fireball', 'target':'Boss', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Rock_to_Game', 'source':'Rock', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Ground_to_Game', 'source':'Ground', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Fire_to_Game', 'source':'Fire', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Building_to_Game', 'source':'Building', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Power_to_Game', 'source':'Power', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Explosion_to_Game', 'source':'Explosion', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Player_to_Game', 'source':'Player', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Mana_to_Game', 'source':'Mana', 'target':'Game', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Projectile_to_Player', 'source':'Projectile', 'target':'Player', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'SettingMenu_to_StartMenu', 'source':'SettingMenu', 'target':'StartMenu', 'uml_edge_type': 'composition'}

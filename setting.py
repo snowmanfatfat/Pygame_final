@@ -33,3 +33,9 @@ def get_path(directory):
             full_path = os.path.join(dirpath, filename)
             files[subfolder].append(full_path)
     return files
+
+# a = get_path(".")
+# codes = [code.replace(".\\", "") for code in a["."]]
+# codes = " ".join(codes)
+# print(codes)
+# pyreverse -o png -p MyProject boss.py building.py buttons.py explosion.py fire.py fireball.py game.py ground.py main.py mana.py player.py power.py projectile.py rock.py setting.py setting_menu.py soundset.py start_menu.py tutorial.py ultimate.py
