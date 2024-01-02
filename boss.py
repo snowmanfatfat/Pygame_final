@@ -43,7 +43,7 @@ class Boss(pygame.sprite.Sprite):
             all_sprites.add(fireball2)
             fireballs.add(fireball)
             fireballs2.add(fireball2)
-        play_sound("sfx/boss_attack.wav")
+        play_sound("sfx/boss_attack.wav", 1)
         
     def update(self):
         now = pygame.time.get_ticks()

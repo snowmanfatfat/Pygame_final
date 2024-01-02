@@ -110,7 +110,6 @@ class Tutorial:
                         self.page = max(self.page, 0)
                         
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    print(x, y)
                     if event.button == 1:
                         self.page += 1
                     elif event.button == 3:

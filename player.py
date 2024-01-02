@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
     
     # 射子彈
     def shoot(self):
-        play_sound("sfx/click_left.wav", 0.2)
+        play_sound("sfx/click_left.wav", 1)
         if self.gun == 1:
             bullet = Projectile(self.rect.centerx, self.rect.centery, 'bullet')
             all_sprites.add(bullet)

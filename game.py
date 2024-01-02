@@ -200,7 +200,7 @@ class Game:
     def boss_collision(self, group, damage, sound, explosion_type):
         hits = pygame.sprite.spritecollide(self.boss, group, True, pygame.sprite.collide_circle)
         for hit in hits: # 檢查單一物件和組之間的碰撞
-            play_sound(sound, 0.6)
+            play_sound(sound, 1)
             self.boss.hp -= damage
             if self.boss.hp <= 0 and self.boss.is_second and not self.is_death_expl2:
                 stop_sound("sfx/boss_bgm.wav")
@@ -489,7 +489,7 @@ class Game:
                     for hit in hits:
                         expl = Explosion(hit.rect.center, 'sm')
                         all_sprites.add(expl)
-                        play_sound("sfx/block.wav")
+                        play_sound("sfx/block.wav", 0.4)
                         new_rock()
                         
                     if self.time - self.boss_time > 500 and self.boss.hp > 0:
@@ -521,39 +521,39 @@ class Game:
                 self.player_collision(fireballs2, 30, 'lg') # 判斷火球2與主角相撞
             
                 if self.is_ultimate:
-                    self.other_collision('ultimate', rocks, "sfx/explosion.wav", 'lg', 0.6)
-                    self.other_collision('ultimate', buildings, "sfx/explosion.wav", 'lg', 0.6)
-                    self.other_collision('ultimate', fires, "sfx/fire_clear.wav", 'lg', 0.8)
-                    self.other_collision('ultimate', fireballs, "sfx/fire_clear.wav", 'lg', 0.8)
-                    self.other_collision('ultimate', fireballs2, "sfx/fire_clear.wav", 'lg', 0.8)
+                    self.other_collision('ultimate', rocks, "sfx/explosion.wav", 'lg', 1)
+                    self.other_collision('ultimate', buildings, "sfx/explosion.wav", 'lg', 1)
+                    self.other_collision('ultimate', fires, "sfx/fire_clear.wav", 'lg', 1)
+                    self.other_collision('ultimate', fireballs, "sfx/fire_clear.wav", 'lg', 1)
+                    self.other_collision('ultimate', fireballs2, "sfx/fire_clear.wav", 'lg', 1)
                     if not self.ultimate.alive():
                         self.is_ultimate = False
             
-                self.other_collision(bullets, rocks, "sfx/explosion.wav", 'sm', 0.6)
-                self.other_collision(bullets, fires, "sfx/fire_clear.wav", 'sm', 0.8)
-                self.other_collision(bullets, fireballs, "sfx/fire_clear.wav", 'sm', 0.8)
-                self.other_collision(bullets, fireballs2, "sfx/fire_clear.wav", 'sm', 0.8)
+                self.other_collision(bullets, rocks, "sfx/explosion.wav", 'sm', 1)
+                self.other_collision(bullets, fires, "sfx/fire_clear.wav", 'sm', 1)
+                self.other_collision(bullets, fireballs, "sfx/fire_clear.wav", 'sm', 1)
+                self.other_collision(bullets, fireballs2, "sfx/fire_clear.wav", 'sm', 1)
             
                 # 判斷子彈被建築擋住
                 hits = pygame.sprite.groupcollide(bullets, buildings, True, False, pygame.sprite.collide_circle) # False表示buildings不刪除
                 for hit in hits:
                     expl = Explosion(hit.rect.center, 'sm')
                     all_sprites.add(expl)
-                    play_sound("sfx/block.wav")
+                    play_sound("sfx/block.wav", 0.4)
             
                 # 判斷火球被建築擋住
                 hits = pygame.sprite.groupcollide(fireballs, buildings, True, False, pygame.sprite.collide_circle)
                 for hit in hits:
                     expl = Explosion(hit.rect.center, 'sm')
                     all_sprites.add(expl)
-                    play_sound("sfx/block.wav")
+                    play_sound("sfx/block.wav", 0.4)
                     
                 # 判斷火球2被建築擋住
                 hits = pygame.sprite.groupcollide(fireballs2, buildings, True, False, pygame.sprite.collide_circle)
                 for hit in hits:
                     expl = Explosion(hit.rect.center, 'sm')
                     all_sprites.add(expl)
-                    play_sound("sfx/block.wav")
+                    play_sound("sfx/block.wav", 0.4)
 
                 # 判斷寶物與主角相撞
                 hits = pygame.sprite.spritecollide(self.player, powers, True)
